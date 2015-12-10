@@ -13,7 +13,7 @@ in that order.
 
 """
 
-import io, os, sys, types, StringIO
+import io, os, sys, types
 from IPython import nbformat, get_ipython
 
 # http://ipython.org/ipython-doc/3/notebook/nbformat.html
@@ -62,7 +62,7 @@ class NBModuleType(types.ModuleType):
         stdout = sys.stdout
         stderr = sys.stderr
         if silent:
-            sys.stdout = sys.stderr = StringIO.StringIO()
+            sys.stdout = sys.stderr = open(os.devnull,'w')
         try:
             for execution_count,code in self.__ccode__:
                 ##print execution_count,code
