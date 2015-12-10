@@ -14,7 +14,8 @@ in that order.
 """
 
 import io, os, sys, types
-from IPython import nbformat, get_ipython
+from IPython import get_ipython
+import nbformat
 
 # http://ipython.org/ipython-doc/3/notebook/nbformat.html
 # 
