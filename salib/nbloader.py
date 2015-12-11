@@ -13,6 +13,7 @@ in that order.
 
 """
 
+from __future__ import print_function
 import io, os, sys, types
 from IPython import get_ipython
 import nbformat
@@ -54,35 +55,6 @@ class NBModuleType(types.ModuleType):
         self.__ccode__  = None
         self.__loaded__ = False
         
-    def __runcode__(self,after=None,silent=False):
-        user_ns = get_ipython().user_ns
-        try:
-            del user_ns['__execution_count__']
-        except KeyError:
-            pass
-        stdout = sys.stdout
-        stderr = sys.stderr
-        if silent:
-            sys.stdout = sys.stderr = open(os.devnull,'w')
-        try:
-            for execution_count,code in self.__ccode__:
-                ##print execution_count,code
-                if after is not None:
-                    if execution_count == after:
-                        after = None
-                    continue
-                if not self.__loaded__:
-                    user_ns['__execution_count__'] = execution_count
-                    print 'Exec:',code,user_ns['__execution_count__'],execution_count
-                exec(code,self.__dict__)
-        finally:
-            sys.stdout = stdout
-            sys.stderr = stderr
-        try:
-            del user_ns['__execution_count__']
-        except KeyError:
-            pass
-
 class NotebookLoader(object):
     
     """Module Loader for IPython Notebooks"""
@@ -112,9 +84,13 @@ class NotebookLoader(object):
         
         # extra work to ensure that magics that would affect the user_ns
         # actually affect the notebook module's ns
-        save_user_ns = self.shell.user_ns
-        self.shell.user_ns = mod.__dict__
+        saved_user_ns = self.shell.user_ns
+        modns = self.shell.user_ns = mod.__dict__
         
+        stdout = sys.stdout
+        stderr = sys.stderr
+        sys.stdout = sys.stderr = open(os.devnull,'w')
+
         _code = []
         try:
           for cell in nb['cells']:
@@ -126,11 +102,14 @@ class NotebookLoader(object):
                 if code.startswith('## Test Section:'):
                     break
                 ccode = compile(code,'<file: {0} cell {1}>'.format(path,ec),'exec')
+                exec(ccode,modns)
                 _code.append((ec,ccode))
         finally:
-            self.shell.user_ns = save_user_ns
+            self.shell.user_ns = saved_user_ns
+            sys.stdout = stdout
+            sys.stderr = stderr
+
         mod.__ccode__ = _code
-        mod.__runcode__(after=None,silent=True)
         mod.__loaded__ = True
         return mod
 

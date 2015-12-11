@@ -7,7 +7,7 @@ examples and matrix methods for the more advanced).
 
 That is, they will; currently only a few slope-deflection examples are shown
 (under [slope-deflection/](slope-deflection)) and there is the barest
-start of a 2d frame program (under [matrix-methods/frame2d](matrix-methods/frame2d)).
+start of a 2nd-order elastic 2-D frame program (under [matrix-methods/frame2d](matrix-methods/frame2d)).
 
 They all use a Jupyter/Python notebook interface 
 and are programmed in Python 2.7.  They make use of modules numpy,
