@@ -5,27 +5,20 @@ import sys
 
 import os
 import os.path
-try:
-    import magic
-    def mimetype(filename):
-        return magic.from_file(filename,mime=True)
-except ImportError:
-    WARNED1 = False
-    def mimetype(filename):
-        global WARNED1
-        if not WARNED1:
-            print("Unable to import module 'magic'.  Image type will be guessed from extension.",file=sys.stderr)
-            WARNED1 = True
-        ext = filename.split('.')[-1]
-        if ext == 'svg':
-            return 'image/svg+xml'
-        if ext == 'png':
-            return 'image/png'
-        if ext in ['jpeg','jpg']:
-            return 'image/jpeg'
-        return 'image/'+ext
-        
 from IPython import display
+import imghdr
+
+def __test_svg(bstream,fileobj):
+    """Extension for imghdr to detect svg files."""
+    if fileobj:
+        fileobj.seek(0L)
+        data = fileobj.read(6)
+    else:
+        data = bstream.read(6)
+    if data == '<?xml ':  # IFFY!
+        return 'svg'
+    return None
+imghdr.tests.append(__test_svg)
 
 EXTS = ['svg','png','jpeg','jpg']
 
@@ -36,11 +29,11 @@ def showImage(basename,rescan=False):
     that order.  If rescan is True, scanning a new image is forced."""
 
     def _display(ifile):
-        itype = mimetype(ifile)
+        itype = imghdr.what(ifile)
         img = None
-        if itype in ['image/jpeg','image/png']:
+        if itype in ['jpeg','png']:
             img = display.Image(filename=ifile,embed=True)
-        elif itype == 'image/svg+xml':
+        elif itype == 'svg':
             with file(ifile,"rb") as inf:
                 svgdata = inf.read()
             img = display.SVG(data=svgdata)
