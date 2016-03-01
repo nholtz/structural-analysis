@@ -1,6 +1,7 @@
    git commit -a -m 'a msg'
    git push work master
 
+   git pull -m
 
 # some instructions
 
