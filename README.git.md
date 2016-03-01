@@ -9,3 +9,6 @@
   https://help.github.com/articles/pushing-to-a-remote/
 
 # the working branch is 'work' on git:holtz3.cee.carleton.ca:/files3/www/git/structural-analysis.git
+
+  git commit -a -m 'msg'
+  git push . HEAD:work
