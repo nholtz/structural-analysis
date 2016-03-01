@@ -1,7 +1,9 @@
    git commit -a -m 'a msg'
-   git push work master
+   git push origin master
+or
+   git push github master
 
-   git pull -m
+   git pull
 
 # some instructions
 
@@ -12,8 +14,3 @@
 * to push local changes back to remote:
 
   https://help.github.com/articles/pushing-to-a-remote/
-
-# the working branch is 'work' on git:holtz3.cee.carleton.ca:/files3/www/git/structural-analysis.git
-
-  git commit -a -m 'msg'
-  git push work master
