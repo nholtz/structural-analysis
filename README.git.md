@@ -1,3 +1,7 @@
+   git commit -a -m 'a msg'
+   git push work master
+
+
 # some instructions
 
 * to sync local from remote (pull changes from remote)
@@ -11,4 +15,4 @@
 # the working branch is 'work' on git:holtz3.cee.carleton.ca:/files3/www/git/structural-analysis.git
 
   git commit -a -m 'msg'
-  git push . HEAD:work
+  git push work master
