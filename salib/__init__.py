@@ -11,11 +11,11 @@ import imghdr
 def __test_svg(bstream,fileobj):
     """Extension for imghdr to detect svg files."""
     if fileobj:
-        fileobj.seek(0L)
+        fileobj.seek(0)
         data = fileobj.read(6)
     else:
         data = bstream.read(6)
-    if data == '<?xml ':  # IFFY!
+    if data == b'<?xml ':  # IFFY!
         return 'svg'
     return None
 imghdr.tests.append(__test_svg)
@@ -34,7 +34,7 @@ def showImage(basename,rescan=False):
         if itype in ['jpeg','png']:
             img = display.Image(filename=ifile,embed=True)
         elif itype == 'svg':
-            with file(ifile,"rb") as inf:
+            with open(ifile,"rb") as inf:
                 svgdata = inf.read()
             img = display.SVG(data=svgdata)
         else:
