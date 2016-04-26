@@ -1,0 +1,8 @@
+make sure to install git:
+   
+     conda install git
+     
+I had to install pandas, numpy, scipy, matplotlib and some 
+other stuff.
+
+I had to install nbformat for Python 3.
