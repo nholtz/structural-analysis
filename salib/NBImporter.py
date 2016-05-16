@@ -3,15 +3,27 @@
 
 # ## Notebook Importer
 # Importing the module created from this notebook allows you to 
-# directly import other notebooks.  This is done by translating
-# the notebook file to a Python (.py) file (only if necessary) 
-# and letting the normal import mechanism handle that.
+# directly import other notebooks.
 # #### Instructions
-# This notebook file must be manually downloaded as a .py file and 
-# copied to the correct location (because it can't be directly
+# This notebook file must be manually downloaded as a `.py` file and 
+# copied to a correct location (because it can't be directly
 # imported until it has been imported :-)).
+# 
+# Then do:
+# ```
+# from NBImporter import import_notebooks   # or some such
+# import_notebooks()                        # to enable the importer
+# ```
+# #### Implementation Method
+# The basic method is to translate
+# the notebook file to a Python (`.py`) file (but only if necessary) 
+# and then letting the normal import mechanism handle that (which
+# means it can also be compiled to a `.pyc file`).  The `.find_module()`
+# does that when it locates the proper `.ipynb` file, then returns
+# None to indicate it didn't find anything.  The importer will then try
+# the next import method in the chain.
 
-# In[48]:
+# In[1]:
 
 from __future__ import print_function
 
@@ -23,7 +35,7 @@ import io
 import time
 
 
-# In[74]:
+# In[ ]:
 
 class NotebookImporter(object):
     
@@ -114,10 +126,22 @@ class NotebookImporter(object):
                     pyf.write(code)
 
 
-# In[75]:
+# **NOTE:** It might be possible to have an argument to optionally disable magics, output, etc ...
+# It might be necessary to force recompile, but that leads to ugly non-localness ...
 
-sys.meta_path.append(NotebookImporter())
+# In[3]:
 
+def import_notebooks():
+    for x in sys.meta_path:
+        if type(x) is NotebookImporter:
+            return
+    sys.meta_path.append(NotebookImporter())
+
+
+# #### Ugliness!
+# One problem with compile-to-py and `import_notebooks()` is if you forget to call it (or even forget
+# to import this module), your import statements may grab old out-of-date .py files and you might
+# never know about it ....
 
 # In[ ]:
 
