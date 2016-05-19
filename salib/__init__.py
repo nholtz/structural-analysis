@@ -64,31 +64,33 @@ def showImage(basename,rescan=False):
 
 from NBImporter import import_notebooks
 
-def extend(new):
-    """This is used as a class decorator to 'exend' class definitions,
+def extend(old):
+    """This is used as a class decorator to 'extend' class definitions,
     for example, over widely dispersed areas.  EG:
 
         class Foo(object):
             . . .
-        @extend
+        @extend(Foo)
         class Foo:
             def meth2(...):
             . . .
 
     will result in one class Foo containing all methods, etc."""
 
-    name = new.__name__
-    old = globals().get(name,None)
-    if old is None:
-        old = type(name,(object,),{})
-    ok = ['__init__']
-    for a,v in inspect.getmembers(new):
-        if not a.startswith('_') or a in ok:
-            if type(v) is types.MethodType:
-                v = types.MethodType(v.im_func,v.im_self,old)
-            elif type(v) is property:
-                v = property(v.fget,v.fset,v.fdel)
-            elif type(v) is types.FunctionType:
-                v = staticmethod(types.FunctionType(v.func_code,v.func_globals,v.func_name,v.func_defaults,v.func_closure))
-            setattr(old,a,v)
-    return old
+    def _extend(new,old=old):
+        if new.__name__ != old.__name__:
+            raise TypeError("Class names must match: '{}' != '{}'".format(new.__name__,old.__name__))
+        ok = ['__init__']
+        for a,v in inspect.getmembers(new):
+            if not a.startswith('_') or a in ok:
+                if type(v) is types.MethodType:
+                    v = types.MethodType(v.im_func,v.im_self,old)
+                elif type(v) is property:
+                    v = property(v.fget,v.fset,v.fdel)
+                elif type(v) is types.FunctionType:
+                    v = staticmethod(types.FunctionType(v.func_code,v.func_globals,v.func_name,v.func_defaults,v.func_closure))
+                setattr(old,a,v)
+                #print('Set {} in class {} to type {}'.format(a,old.__name__,type(v)))
+        return old
+    
+    return _extend
