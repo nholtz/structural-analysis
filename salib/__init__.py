@@ -2,11 +2,13 @@
 
 from __future__ import print_function
 import sys
-
+import inspect
+import types
 import os
 import os.path
-from IPython import display
 import imghdr
+
+from IPython import display
 
 def __test_svg(bstream,fileobj):
     """Extension for imghdr to detect svg files."""
@@ -59,3 +61,34 @@ def showImage(basename,rescan=False):
         _display(ifile)
     else:
         raise Exception("Unable to find image '{0}'; Tried these extensions: {1}".format(basename,EXTS))
+
+from NBImporter import import_notebooks
+
+def extend(new):
+    """This is used as a class decorator to 'exend' class definitions,
+    for example, over widely dispersed areas.  EG:
+
+        class Foo(object):
+            . . .
+        @extend
+        class Foo:
+            def meth2(...):
+            . . .
+
+    will result in one class Foo containing all methods, etc."""
+
+    name = new.__name__
+    old = globals().get(name,None)
+    if old is None:
+        old = type(name,(object,),{})
+    ok = ['__init__']
+    for a,v in inspect.getmembers(new):
+        if not a.startswith('_') or a in ok:
+            if type(v) is types.MethodType:
+                v = types.MethodType(v.im_func,v.im_self,old)
+            elif type(v) is property:
+                v = property(v.fget,v.fset,v.fdel)
+            elif type(v) is types.FunctionType:
+                v = staticmethod(types.FunctionType(v.func_code,v.func_globals,v.func_name,v.func_defaults,v.func_closure))
+            setattr(old,a,v)
+    return old

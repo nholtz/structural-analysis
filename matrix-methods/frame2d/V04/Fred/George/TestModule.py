@@ -1,4 +1,4 @@
-## Compiled from Fred/George/TestModule.py on Mon May 16 11:17:55 2016
+## Compiled from Fred/George/TestModule.py on Wed May 18 19:29:58 2016
 
 ## In [ ]:
 try:
@@ -18,6 +18,12 @@ def foo():
 
 ## In [3]:
 get_ipython().magic(u'ls')
+
+## In [1]:
+get_ipython().run_cell_magic(u'test', u'', u'a = 3\nb = 4\na+b')
+
+## In [4]:
+get_ipython().magic(u'lsmagic')
 
 ## In [4]:
 #%%sh
