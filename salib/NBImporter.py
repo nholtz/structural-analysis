@@ -114,6 +114,8 @@ class NotebookImporter(object):
                     ##print ("Source",cell['source'])
                     ec = cell['execution_count']
                     code = shell.input_transformer_manager.transform_cell(cell['source'])
+                    if code.startswith('##test:'):
+                        continue
                     if code.startswith('## Test Section:'):
                         pyf.write(u'\n## Import ended by "## Test Section:"\n')
                         break
