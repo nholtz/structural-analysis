@@ -84,7 +84,7 @@ def extend(old):
         for a,v in inspect.getmembers(new):
             if not a.startswith('_') or a in ok:
                 if type(v) is types.MethodType:
-                    v = types.MethodType(v.im_func,v.im_self,old)
+                    v = types.MethodType(v.im_func,old if v.im_self is new else v.im_self,old)
                 elif type(v) is property:
                     v = property(v.fget,v.fset,v.fdel)
                 elif type(v) is types.FunctionType:
