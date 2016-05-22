@@ -80,9 +80,13 @@ def extend(old):
     def _extend(new,old=old):
         if new.__name__ != old.__name__:
             raise TypeError("Class names must match: '{}' != '{}'".format(new.__name__,old.__name__))
-        ok = ['__init__']
+        if type(new) is not types.ClassType:
+            raise TypeError("Extension class must be an old-style class (i.e. not derived from class object)")
+        if len(new.__bases__) != 0:
+            raise TypeError("Extension class must not have any base classes.")
+        ng = ['__doc__','__module__']
         for a,v in inspect.getmembers(new):
-            if not a.startswith('_') or a in ok:
+            if a not in ng:
                 if type(v) is types.MethodType:
                     if v.im_self is None:
                         v =  types.MethodType(v.im_func,None,old)

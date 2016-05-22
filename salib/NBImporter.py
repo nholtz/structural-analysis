@@ -116,6 +116,8 @@ class NotebookImporter(object):
                     code = shell.input_transformer_manager.transform_cell(cell['source'])
                     if code.startswith('##test:'):
                         continue
+                    if code.startswith('get_ipython().run_cell_magic('):
+                        continue
                     if code.startswith('## Test Section:'):
                         pyf.write(u'\n## Import ended by "## Test Section:"\n')
                         break
