@@ -1,13 +1,13 @@
-## Compiled from FixedEndForces.py on Sat May 21 16:14:53 2016
+## Compiled from FixedEndForces.py on Sun May 22 20:36:07 2016
 
-## In [2]:
+## In [1]:
 from __future__ import division, print_function
 
 import numpy as np
 import sys
 import salib as sl
 
-## In [6]:
+## In [13]:
 class EF(object):
     
     """Class EF represents the 6 end forces acting on a 2-D, planar, beam element."""
@@ -33,6 +33,14 @@ class EF(object):
         assert type(self) is type(other)
         new = self.__class__(self.fefs+other.fefs)
         return new
+    
+    def __mul__(self,scale):
+        """Multiply this set of forces by the scalar value, returning the product."""
+        if scale == 1.0:
+            return self
+        return self.__class__(self.fefs*scale)
+    
+    __rmul__ = __mul__
     
     def __repr__(self):
         return '{}({},{},{},{},{},{})'.format(self.__class__.__name__,*(list(self.fefs)))
