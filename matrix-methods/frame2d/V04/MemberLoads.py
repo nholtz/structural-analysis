@@ -1,4 +1,4 @@
-## Compiled from MemberLoads.py on Mon May 23 09:18:03 2016
+## Compiled from MemberLoads.py on Tue May 24 10:34:14 2016
 
 ## In [1]:
 from __future__ import division, print_function
@@ -7,7 +7,7 @@ import numpy as np
 import sys
 import salib as sl
 
-## In [13]:
+## In [2]:
 class EF(object):
     
     """Class EF represents the 6 end forces acting on a 2-D, planar, beam element."""
@@ -45,7 +45,7 @@ class EF(object):
     def __repr__(self):
         return '{}({},{},{},{},{},{})'.format(self.__class__.__name__,*(list(self.fefs)))
 
-## In [13]:
+## In [10]:
 @sl.extend(EF)
 class EF:
 
@@ -97,7 +97,7 @@ class EF:
     def m5(self,v):
         self.fefs[5] = v
 
-## In [16]:
+## In [13]:
 class MemberLoad(object):
     
     TABLE_MAP = {} # map from load parameter names to column names in table
@@ -120,7 +120,7 @@ class MemberLoad(object):
         of values."""
         raise NotImplementedError()
 
-## In [17]:
+## In [14]:
 @sl.extend(MemberLoad)
 class MemberLoad:
     
@@ -142,7 +142,7 @@ class MemberLoad:
         degree of the curve between.  One of 'r', 'l' may be None."""
         raise NotImplementedError()
 
-## In [20]:
+## In [15]:
 class PL(MemberLoad):
     
     TABLE_MAP = {'P':'W1','a':'A'}
@@ -170,9 +170,9 @@ class PL(MemberLoad):
         return self.P*(x-self.a)*(x>self.a)
         
     def __repr__(self):
-        return '{}(L={},W1={},a={})'.format(self.__class__.__name__,self.L,self.P,self.a)
+        return '{}(L={},P={},a={})'.format(self.__class__.__name__,self.L,self.P,self.a)
 
-## In [22]:
+## In [17]:
 @sl.extend(MemberLoad)
 class MemberLoad:
     
@@ -189,7 +189,7 @@ class PL:
     def mpts(self):
         return (self.a,None,1)
 
-## In [25]:
+## In [20]:
 class UDL(MemberLoad):
     
     TABLE_MAP = {'w':'W1'}
@@ -223,7 +223,7 @@ class UDL(MemberLoad):
     def mpts(self):
         return (0.,self.L,2)
 
-## In [27]:
+## In [22]:
 class LVL(MemberLoad):
     
     TABLE_MAP = {'w1':'W1','w2':'W2','a':'A','b':'B','c':'C'}
@@ -290,7 +290,7 @@ class LVL(MemberLoad):
     def mpts(self):
         return (self.a,self.a+self.b,2 if self.w1==self.w2 else 3)
 
-## In [28]:
+## In [23]:
 class CM(MemberLoad):
     
     TABLE_MAP = {'M':'W1','a':'A'}
@@ -328,7 +328,7 @@ class CM(MemberLoad):
     def __repr__(self):
         return '{}(L={},M={},a={})'.format(self.__class__.__name__,self.L,self.M,self.a)
 
-## In [29]:
+## In [24]:
 def makeMemberLoad(L,data,ltype=None):
     def all_subclasses(cls):
         _all_subclasses = []

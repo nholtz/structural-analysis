@@ -1,4 +1,4 @@
-## Compiled from Tables.py on Mon May 23 18:30:44 2016
+## Compiled from Tables.py on Tue May 24 10:58:24 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -10,14 +10,7 @@ import hashlib
 from IPython.core.magic import register_cell_magic
 import re
 
-## In [4]:
-f = pd.DataFrame(columns=('One','Two'))
-f
-
-## In [ ]:
-
-
-## In [52]:
+## In [3]:
 class Table(object):
     
     DSNAME = None     # default data set name
@@ -96,13 +89,16 @@ class Table(object):
         file_name = self.file_name
         return (self.basename(),signature(file_name))
     
+    def __len__(self):
+        return len(self.data)
+    
 def signature(file_name):
     f = open(file_name,mode='rb')
     m = hashlib.sha256(f.read())
     f.close()
     return m.hexdigest()
 
-## In [61]:
+## In [13]:
 @register_cell_magic('Table')
 def cell_table(line,cell):
     mo = re.match(r'\s*(\S+)\s*$',line)
