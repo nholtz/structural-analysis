@@ -64,7 +64,7 @@ def showImage(basename,rescan=False):
 
 from NBImporter import import_notebooks
 
-def extend(old):
+def extend_old(old):
     """This is used as a class decorator to 'extend' class definitions,
     for example, over widely dispersed areas.  EG:
 
@@ -78,6 +78,10 @@ def extend(old):
     will result in one class Foo containing all methods, etc."""
 
     def _extend(new,old=old):
+        if old is None:
+            old = getattr(sys.modules[new.__module__],new.__name__,None)
+            if old is None:
+                raise TypeError("Cannot find previous version of class: {}".format(new.__name__))
         if new.__name__ != old.__name__:
             raise TypeError("Class names must match: '{}' != '{}'".format(new.__name__,old.__name__))
         if type(new) is not types.ClassType:
@@ -101,3 +105,5 @@ def extend(old):
         return old
     
     return _extend
+
+extend = extend_old(None)

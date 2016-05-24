@@ -1,8 +1,8 @@
-## Compiled from NodeLoads.py on Sun May 22 19:11:28 2016
+## Compiled from NodeLoads.py on Tue May 24 17:49:49 2016
 
 ## In [1]:
 import numpy as np
-import salib as sl
+from salib import extend
 
 ## In [2]:
 class NodeLoad(object):
@@ -29,14 +29,17 @@ def makeNodeLoad(data):
     return NodeLoad(G('FX',0),G('FY',0),G('MZ',0))
 
 ## In [6]:
-@sl.extend(NodeLoad)
+id(NodeLoad)
+
+## In [7]:
+@extend
 class NodeLoad:
     
     def __getitem__(self,ix):
         return self.forces[ix]
 
-## In [10]:
-@sl.extend(NodeLoad)
+## In [11]:
+@extend
 class NodeLoad:
     
     @property

@@ -1,11 +1,11 @@
-## Compiled from MemberLoads.py on Tue May 24 10:34:14 2016
+## Compiled from MemberLoads.py on Tue May 24 17:49:49 2016
 
 ## In [1]:
 from __future__ import division, print_function
 
 import numpy as np
 import sys
-import salib as sl
+from salib import extend
 
 ## In [2]:
 class EF(object):
@@ -46,7 +46,7 @@ class EF(object):
         return '{}({},{},{},{},{},{})'.format(self.__class__.__name__,*(list(self.fefs)))
 
 ## In [10]:
-@sl.extend(EF)
+@extend
 class EF:
 
     @property
@@ -121,7 +121,7 @@ class MemberLoad(object):
         raise NotImplementedError()
 
 ## In [14]:
-@sl.extend(MemberLoad)
+@extend
 class MemberLoad:
     
     @property
@@ -173,12 +173,12 @@ class PL(MemberLoad):
         return '{}(L={},P={},a={})'.format(self.__class__.__name__,self.L,self.P,self.a)
 
 ## In [17]:
-@sl.extend(MemberLoad)
+@extend
 class MemberLoad:
     
     EPSILON = 1.0E-6
 
-@sl.extend(PL)
+@extend
 class PL:
     
     @property
