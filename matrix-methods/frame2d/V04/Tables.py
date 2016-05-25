@@ -1,4 +1,4 @@
-## Compiled from Tables.py on Tue May 24 17:07:10 2016
+## Compiled from Tables.py on Wed May 25 09:03:12 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -17,6 +17,18 @@ class Table(object):
     DSTYPE = 'dir'    # someday we will allow 'zip' for zip archives
     #DSTYPE = 'cell'
     CELLDATA = {}
+    
+    @classmethod
+    def set_source(cls,ds_name,ds_type=None):
+        if ds_type is None:
+            dirname = ds_name + '.d'
+            if os.path.exists(dirname):
+                ds_type = 'dir'
+            else:
+                ds_type = 'cell'
+        cls.DSNAME = ds_name
+        cls.DSTYPE = ds_type
+        cls.CELLDATA = {}
     
     def __init__(self,table_name,ds_name=None,columns=None,index_col=None,optional=False):
         if ds_name is None and self.DSNAME is not None:
