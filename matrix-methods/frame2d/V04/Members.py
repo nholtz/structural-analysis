@@ -1,7 +1,8 @@
-## Compiled from Members.py on Sun May 22 18:12:09 2016
+## Compiled from Members.py on Thu May 26 11:32:21 2016
 
 ## In [1]:
 import salib as sl
+import numpy as np
 
 ## In [2]:
 class Member(object):
