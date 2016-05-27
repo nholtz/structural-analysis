@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r"
-   sodipodi:docname="frame-6b.svg">
+   sodipodi:docname="frame-6.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -23,17 +23,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.3150307"
-     inkscape:cx="315.54729"
-     inkscape:cy="120.07071"
+     inkscape:zoom="1.4283557"
+     inkscape:cx="222.11356"
+     inkscape:cy="184.69211"
      inkscape:document-units="in"
      inkscape:current-layer="layer1"
      showgrid="true"
      units="in"
      inkscape:window-width="1272"
-     inkscape:window-height="882"
-     inkscape:window-x="205"
-     inkscape:window-y="35"
+     inkscape:window-height="976"
+     inkscape:window-x="502"
+     inkscape:window-y="26"
      inkscape:window-maximized="0"
      showguides="true"
      fit-margin-top="0.2"
@@ -230,7 +230,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
         <cc:license
            rdf:resource="http://creativecommons.org/licenses/by-nc/3.0/" />
       </cc:Work>
@@ -541,18 +541,6 @@
          sodipodi:role="line"
          id="tspan4631"
          x="275.70221"
-         y="328.20062">frame-6b</tspan></text>
-    <circle
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.49999997;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="path4458"
-       cx="224.82755"
-       cy="138.01883"
-       r="1.7433337" />
-    <circle
-       r="1.7433337"
-       cy="138.01883"
-       cx="494.82755"
-       id="circle3417"
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.49999997;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         y="328.20062">frame-6</tspan></text>
   </g>
 </svg>

@@ -1,9 +1,9 @@
-## Compiled from Frame2D_v04.py on Wed May 25 09:43:22 2016
+## Compiled from Frame2D_v04.py on Fri May 27 10:29:26 2016
 
-## In [4]:
+## In [1]:
 from __future__ import print_function
 
-## In [5]:
+## In [2]:
 from salib import extend, import_notebooks
 import_notebooks()
 from Tables import Table
@@ -15,7 +15,7 @@ from MemberLoads import makeMemberLoad
 from collections import OrderedDict, defaultdict
 import numpy as np
 
-## In [6]:
+## In [3]:
 class Object(object):
     pass
 
@@ -25,9 +25,9 @@ class Frame2D(object):
         self.dsname = dsname
         if dsname is not None:
             Table.set_source(dsname)
-        self.clear()
+        self.reset()
         
-    def clear(self):
+    def reset(self):
         self.rawdata = Object()
         self.nodes = OrderedDict()
         self.members = OrderedDict()
@@ -60,7 +60,7 @@ class Frame2D(object):
                 raise Exception('Extra columns {} for table "{}". Required columns are: {}'                               .format(list(prov-reqd),tablename,reqdl))
         return t
 
-## In [8]:
+## In [5]:
 @extend
 class Frame2D:
     
@@ -81,7 +81,7 @@ class Frame2D:
         except KeyError:
             raise Exception('Node not defined: {}'.format(id))
 
-## In [14]:
+## In [11]:
 def isnan(x):
     if x is None:
         return True
@@ -90,7 +90,7 @@ def isnan(x):
     except TypeError:
         return False
 
-## In [15]:
+## In [12]:
 @extend
 class Frame2D:
     
@@ -105,7 +105,7 @@ class Frame2D:
                     node.add_constraint(c)
         self.rawdata.supports = table
 
-## In [19]:
+## In [16]:
 @extend
 class Frame2D:
     
@@ -126,7 +126,7 @@ class Frame2D:
         except KeyError:
             raise Exception('Member not defined: {}'.format(id))
 
-## In [23]:
+## In [20]:
 @extend
 class Frame2D:
     
@@ -139,7 +139,7 @@ class Frame2D:
             memb.add_release(r.RELEASE)
         self.rawdata.releases = table
 
-## In [26]:
+## In [23]:
 try:
     from sst import SST
     __SST = SST()
@@ -149,7 +149,7 @@ except ImportError:
         raise ValueError('Cannot lookup property SIZE because SST is not available.  SIZE = {}'.format(dsg))
         ##return [1.] * len(fields.split(',')) # in case you want to do it that way
 
-## In [28]:
+## In [25]:
 @extend
 class Frame2D:
     
@@ -185,7 +185,7 @@ class Frame2D:
         table.data = data.fillna(method='ffill')
         return table
 
-## In [32]:
+## In [29]:
 @extend
 class Frame2D:
     
@@ -203,7 +203,7 @@ class Frame2D:
             self.nodeloads.append(row.LOAD,n,l)
         self.rawdata.node_loads = table
 
-## In [36]:
+## In [33]:
 @extend
 class Frame2D:
     
@@ -217,7 +217,7 @@ class Frame2D:
             self.memberloads.append(row.LOAD,m,l)
         self.rawdata.member_loads = table
 
-## In [40]:
+## In [37]:
 @extend
 class Frame2D:
     
@@ -234,7 +234,7 @@ class Frame2D:
                 self.loadcombinations.append('all',l,1.0)
         self.rawdata.load_combinations = table
 
-## In [43]:
+## In [40]:
 @extend
 class Frame2D:
 
@@ -246,7 +246,7 @@ class Frame2D:
         for o,l,f in self.loadcombinations.iterloads(casename,self.memberloads):
             yield o,l,f
 
-## In [46]:
+## In [43]:
 @extend
 class Frame2D:
     
@@ -260,7 +260,7 @@ class Frame2D:
         self.install_member_loads()
         self.install_load_combinations()
 
-## In [48]:
+## In [45]:
 @extend
 class Frame2D:
     
@@ -282,7 +282,7 @@ class Frame2D:
                 node.dofnums[ix] = n
                 self.dofdesc[n] = (node,dirn)
 
-## In [51]:
+## In [48]:
 def prhead(txt,ul='='):
     """Print a heading and underline it."""
     print()
@@ -291,7 +291,7 @@ def prhead(txt,ul='='):
         print(ul*(len(txt)//len(ul)))
     print()
 
-## In [52]:
+## In [49]:
 @extend
 class Frame2D:
 
@@ -312,7 +312,7 @@ class Frame2D:
             node,dirn = self.dofdesc[i]
             print('{:>4d}   {:<4s}  {}'.format(i,node.id,dirn))
 
-## In [54]:
+## In [51]:
 @extend
 class Frame2D:
     
@@ -326,7 +326,7 @@ class Frame2D:
             rt = ','.join(sorted(memb.releases,key=lambda t: Member.RELEASES[t]))
             print('{:<7s}  {:<6s}  {:<6s}  {:>8.{precision}f}  {:>8.5f}  {:>8.5f}  {:<10s}  {:>10g}  {:>10g}  {}'                  .format(memb.id,nj.id,nk.id,memb.L,memb.dcx,memb.dcy,str(memb.size),memb.Ix,memb.A,rt,precision=precision))
 
-## In [56]:
+## In [53]:
 @extend
 class Frame2D:
     
@@ -363,7 +363,7 @@ class Frame2D:
         else:
             print(" - - - none - - -")
 
-## In [58]:
+## In [55]:
 @extend
 class Frame2D:
     
@@ -391,6 +391,65 @@ class Frame2D:
         self.print_members()
         print('\n')
         self.print_loads()
+
+## In [57]:
+@extend
+class Frame2D:
+    
+    def buildK(self):
+        K = np.mat(np.zeros((self.ndof,self.ndof)))
+        for memb in self.members.values():
+            Kl = memb.localK()
+            Tm = memb.transform()
+            Kg = Tm.T * Kl * Tm
+            dofnums = memb.nodej.dofnums + memb.nodek.dofnums
+            K[np.ix_(dofnums,dofnums)] += Kg
+        return K
+
+## In [59]:
+@extend
+class Frame2D:
+    
+    def buildP(self,loadcase='all'):
+        P = np.mat(np.zeros((self.ndof,1)))
+        for node,load,factor in self.iter_nodeloads(loadcase):
+            P[node.dofnums] += load.forces * factor
+        return P
+
+## In [61]:
+@extend
+class Frame2D:
+    
+    def buildP(self,loadcase='all'):
+        P = np.mat(np.zeros((self.ndof,1)))
+        for node,load,factor in self.iter_nodeloads(loadcase):
+            P[node.dofnums] += load.forces * factor
+        for memb,load,factor in self.iter_memberloads(loadcase):
+            fefs = memb.fefs([load])
+            gfefs = memb.Tm.T * (fefs.fefs * factor)
+            dofnums = memb.nodej.dofnums + memb.nodek.dofnums
+            P[dofnums] -= gfefs
+        return P
+
+## In [63]:
+@extend
+class Frame2D:
+    
+    def solve(self,loadcase='all'):
+        self.number_dofs()
+        K = self.buildK()
+        P = self.buildP(loadcase)
+        D = np.mat(np.zeros((self.ndof,1)))
+        
+        N = self.nfree
+        Kff = K[:N,:N]  # partition the matrices ....
+        Kfc = K[:N,N:]
+        Kcf = K[N:,:N]
+        Kcc = K[N:,N:]
+        
+        D[:N] = np.linalg.solve(Kff,P[:N] - Kfc*D[N:])  # displacements
+        R = Kcf*D[:N] + Kcc*D[N:] - P[N:]    # reactions at the constrained DOFs
+        return D,R
 
 ## In [ ]:
 

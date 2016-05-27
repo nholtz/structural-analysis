@@ -1,8 +1,9 @@
-## Compiled from Members.py on Thu May 26 11:32:21 2016
+## Compiled from Members.py on Fri May 27 10:51:17 2016
 
 ## In [1]:
 import salib as sl
 import numpy as np
+from MemberLoads import EF
 
 ## In [2]:
 class Member(object):
@@ -137,10 +138,11 @@ class Member(object):
         xm = _getx(self,loads,'mpts')
         return xv,None,xm,None
     
-    def releaseFEF(self,fef,rel):
+    def releaseFEF(self,mef,rel):
         """Return a modified fixed end force vector to account for a moment release
-        at one of the ends.  fef is the original matrix, 'rel' is 2 or 5 to identify 
+        at one of the ends.  mef is the original member end force, 'rel' is 2 or 5 to identify 
         the local dof # of the released moment."""
+        fef = mef.fefs
         L = self.L
         if rel == 2:
             if fef[5,0] == 0.:   # is other end also pinned?
@@ -157,7 +159,7 @@ class Member(object):
         Tf = np.mat([[0.,0.],[1./L,1./L],[1.,0.],[0.,0.],[-1./L,-1./L],[0.,1.]])
         M = Tf*em
 
-        return fef - M*fef[rel,0]
+        return EF(fef - M*fef[rel])
 
 ## In [ ]:
 

@@ -1,4 +1,4 @@
-## Compiled from MemberLoads.py on Thu May 26 23:36:50 2016
+## Compiled from MemberLoads.py on Fri May 27 10:47:05 2016
 
 ## In [1]:
 from __future__ import division, print_function
@@ -32,6 +32,12 @@ class EF(object):
         """Add this set of end forces to another, returning the sum."""
         assert type(self) is type(other)
         new = self.__class__(self.fefs+other.fefs)
+        return new
+    
+    def __sub__(self,other):
+        """Subtract the other from this set of forces, returning the difference."""
+        assert type(self) is type(other)
+        new = self.__class__(self.fefs-other.fefs)
         return new
     
     def __mul__(self,scale):
