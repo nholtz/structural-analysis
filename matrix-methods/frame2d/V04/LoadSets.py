@@ -1,4 +1,4 @@
-## Compiled from LoadSets.py on Tue May 24 10:34:14 2016
+## Compiled from LoadSets.py on Fri May 27 16:16:56 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -6,7 +6,7 @@ from __future__ import print_function
 ## In [2]:
 from collections import OrderedDict
 
-## In [8]:
+## In [3]:
 class LoadSet(object):
     
     def __init__(self):
@@ -32,8 +32,11 @@ class LoadSet(object):
     
     def __iter__(self):
         return iter(self.loadlist)
+    
+    def __contains__(self,key):
+        return key.lower() in self.names
 
-## In [11]:
+## In [7]:
 class LoadCombination(object):
 
     def __init__(self):
@@ -65,6 +68,9 @@ class LoadCombination(object):
         for cname,llist in self.combos.items():
             for lname,factor in llist.items():
                 yield cname,lname,factor
+                
+    def __contains__(self,key):
+        return key.lower() in self.combos
 
 ## In [ ]:
 

@@ -1,4 +1,4 @@
-## Compiled from Members.py on Fri May 27 10:51:17 2016
+## Compiled from Members.py on Fri May 27 16:26:40 2016
 
 ## In [1]:
 import salib as sl
@@ -24,8 +24,8 @@ class Member(object):
         self.Ix = None
         self.A = None
         self.Tm = None           # transformation matrix, global to local
-        self.fefsl = None        # fixed end forces, local coordinates
-        self.mefs = None         # member end forces, local coordinates
+        ##self.fefsl = None        # fixed end forces, local coordinates
+        ##self.mefs = None         # member end forces, local coordinates
         
     def add_release(self,rel):
         r = rel.upper()
@@ -100,16 +100,11 @@ class Member(object):
                           [ 0,   0,   0,   0,   0,   1]])
         return self.Tm
     
-    def fefs(self,loads):
-        if loads:
-            fef = loads[0].fefs()
-            for load in loads[1:]:
-                fef += load.fefs()
+    def fefs(self,loads_factors):
+        fef = sum([l.fefs()*f for l,f in loads_factors],EF())
+        if loads_factors:
             for r in self.releases:
                 fef = self.releaseFEF(fef,self.RELEASES[r])
-        else:
-            fef = zerofefs()
-        self.fefsl = fef            
         return fef
     
     def vm(self,loads,mefs=None):
