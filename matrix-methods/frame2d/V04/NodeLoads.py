@@ -1,4 +1,4 @@
-## Compiled from NodeLoads.py on Tue May 24 17:49:49 2016
+## Compiled from NodeLoads.py on Thu May 26 23:49:12 2016
 
 ## In [1]:
 import numpy as np
@@ -8,10 +8,10 @@ from salib import extend
 class NodeLoad(object):
     
     def __init__(self,fx=0.,fy=0.,mz=0.):
-        if type(fx) is np.ndarray and fx.size == 3:
+        if np.isscalar(fx):
+            self.forces = np.matrix([fx,fy,mz],dtype=np.float64).T
+        else:
             self.forces= fx.copy()
-            return
-        self.forces = np.array([fx,fy,mz],dtype=np.float64)
         
     def __mul__(self,scale):
         if scale == 1.0:
@@ -21,7 +21,7 @@ class NodeLoad(object):
     __rmul__ = __mul__
         
     def __repr__(self):
-        return "{}({},{},{})".format(self.__class__.__name__,*list(self.forces))
+        return "{}({},{},{})".format(self.__class__.__name__,*list(np.array(self.forces.T)[0]))
 
 ## In [4]:
 def makeNodeLoad(data):
@@ -36,7 +36,7 @@ id(NodeLoad)
 class NodeLoad:
     
     def __getitem__(self,ix):
-        return self.forces[ix]
+        return self.forces[ix,0]
 
 ## In [11]:
 @extend
@@ -44,27 +44,27 @@ class NodeLoad:
     
     @property
     def fx(self):
-        return self.forces[0]
+        return self.forces[0,0]
     
     @fx.setter
     def fx(self,v):
-        self.forces[0] = v
+        self.forces[0,0] = v
         
     @property
     def fy(self):
-        return self.forces[1]
+        return self.forces[1,0]
     
     @fy.setter
     def fy(self,v):
-        self.forces[1] = v
+        self.forces[1,0] = v
         
     @property
     def mz(self):
-        return self.forces[2]
+        return self.forces[2,0]
     
     @mz.setter
     def mz(self,v):
-        self.forces[2] = v   
+        self.forces[2,0] = v   
 
 ## In [ ]:
 

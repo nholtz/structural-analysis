@@ -1,4 +1,4 @@
-## Compiled from MemberLoads.py on Tue May 24 17:49:49 2016
+## Compiled from MemberLoads.py on Thu May 26 23:36:50 2016
 
 ## In [1]:
 from __future__ import division, print_function
@@ -16,17 +16,17 @@ class EF(object):
         """Initialize an instance with the 6 end forces.  If the first
         argument is a 6-element array, initialize from a copy of that
         array and ignore any other arguments."""
-        if type(c0) is np.ndarray and c0.size == 6:
-            self.fefs = c0.copy()
+        if np.isscalar(c0):
+            self.fefs = np.matrix([c0,v1,m2,c3,v4,m5],dtype=np.float64).T
         else:
-            self.fefs = np.array([c0,v1,m2,c3,v4,m5],dtype=np.float64)
+            self.fefs = c0.copy()
         
     def __getitem__(self,ix):
         """Retreive one of the forces by numer.  This allows allows unpacking
         of all 6 end forces into 6 variables using something like:
            c0,v1,m2,c3,v4,m5 = self
         """
-        return self.fefs[ix]
+        return self.fefs[ix,0]
     
     def __add__(self,other):
         """Add this set of end forces to another, returning the sum."""
@@ -43,7 +43,7 @@ class EF(object):
     __rmul__ = __mul__
     
     def __repr__(self):
-        return '{}({},{},{},{},{},{})'.format(self.__class__.__name__,*(list(self.fefs)))
+        return '{}({},{},{},{},{},{})'.format(self.__class__.__name__,*list(np.array(self.fefs.T)[0]))
 
 ## In [10]:
 @extend
@@ -51,51 +51,51 @@ class EF:
 
     @property
     def c0(self):
-        return self.fefs[0]
+        return self.fefs[0,0]
     
     @c0.setter
     def c0(self,v):
-        self.fefs[0] = v
+        self.fefs[0,0] = v
     
     @property
     def v1(self):
-        return self.fefs[1]
+        return self.fefs[1,0]
     
     @v1.setter
     def v1(self,v):
-        self.fefs[1] = v
+        self.fefs[1,0] = v
     
     @property
     def m2(self):
-        return self.fefs[2]
+        return self.fefs[2,0]
     
     @m2.setter
     def m2(self,v):
-        self.fefs[2] = v
+        self.fefs[2,0] = v
     
     @property
     def c3(self):
-        return self.fefs[3]
+        return self.fefs[3,0]
     
     @c3.setter
     def c3(self,v):
-        self.fefs[3] = v
+        self.fefs[3,0] = v
     
     @property
     def v4(self):
-        return self.fefs[4]
+        return self.fefs[4,0]
     
     @v4.setter
     def v4(self,v):
-        self.fefs[4] = v
+        self.fefs[4,0] = v
     
     @property
     def m5(self):
-        return self.fefs[5]
+        return self.fefs[5,0]
     
     @m5.setter
     def m5(self,v):
-        self.fefs[5] = v
+        self.fefs[5,0] = v
 
 ## In [13]:
 class MemberLoad(object):
