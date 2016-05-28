@@ -1,4 +1,4 @@
-## Compiled from Frame2D_v04.py on Fri May 27 10:29:26 2016
+## Compiled from Frame2D_v04.py on Fri May 27 21:22:01 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -34,9 +34,8 @@ class Frame2D(object):
         self.nodeloads = LoadSet()
         self.memberloads = LoadSet()
         self.loadcombinations = LoadCombination()
-        #self.dofdesc = []
-        #self.nodeloads = defaultdict(list)
-        #self.membloads = defaultdict(list)
+        self.dofdesc = []
+        self.loadcase_fefs = {}
         self.ndof = 0
         self.nfree = 0
         self.ncons = 0
@@ -228,7 +227,7 @@ class Frame2D:
         if len(table) > 0:
             for ix,row in table.data.iterrows():
                 self.loadcombinations.append(row.CASE,row.LOAD,row.FACTOR)
-        else:
+        if 'all' not in self.loadcombinations:
             all = self.nodeloads.names.union(self.memberloads.names)
             for l in all:
                 self.loadcombinations.append('all',l,1.0)
@@ -383,7 +382,7 @@ class Frame2D:
         print('                             # of reactions:',r)
         print('                                 # of nodes:',j)
         print('                            # of conditions:',c)
-        print('             degree of static indeterminacy:',(3*m+r)-(3*j+c))
+        print('           degree of statical indeterminacy:',(3*m+r)-(3*j+c))
         print('\n')
 
         self.print_nodes()
@@ -416,7 +415,7 @@ class Frame2D:
             P[node.dofnums] += load.forces * factor
         return P
 
-## In [61]:
+## In [66]:
 @extend
 class Frame2D:
     
@@ -424,20 +423,28 @@ class Frame2D:
         P = np.mat(np.zeros((self.ndof,1)))
         for node,load,factor in self.iter_nodeloads(loadcase):
             P[node.dofnums] += load.forces * factor
-        for memb,load,factor in self.iter_memberloads(loadcase):
-            fefs = memb.fefs([load])
-            gfefs = memb.Tm.T * (fefs.fefs * factor)
+        for memb,mfefs in self.loadcase_fefs[loadcase].items():
+            gfefs = memb.Tm.T * mfefs.fefs
             dofnums = memb.nodej.dofnums + memb.nodek.dofnums
             P[dofnums] -= gfefs
         return P
 
-## In [63]:
+    def calc_fefs(self,loadcase='all'):
+        ll = defaultdict(list)
+        for memb,load,factor in self.iter_memberloads(loadcase):
+            ll[memb].append((load,factor))
+        fef = {memb:memb.fefs(loads) for memb,loads in ll.items()}
+        self.loadcase_fefs[loadcase] = fef
+        return fef
+
+## In [67]:
 @extend
 class Frame2D:
     
     def solve(self,loadcase='all'):
         self.number_dofs()
         K = self.buildK()
+        self.calc_fefs(loadcase)
         P = self.buildP(loadcase)
         D = np.mat(np.zeros((self.ndof,1)))
         
@@ -450,6 +457,3 @@ class Frame2D:
         D[:N] = np.linalg.solve(Kff,P[:N] - Kfc*D[N:])  # displacements
         R = Kcf*D[:N] + Kcc*D[N:] - P[N:]    # reactions at the constrained DOFs
         return D,R
-
-## In [ ]:
-
