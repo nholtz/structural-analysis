@@ -1,20 +1,20 @@
-## Compiled from Frame2D_SolveLinear.py on Tue May 31 23:08:27 2016
+## Compiled from Frame2D_SolveLinear.py on Tue May 31 23:27:40 2016
 
-## In [2]:
+## In [1]:
 from __future__ import print_function
 
-## In [19]:
+## In [2]:
 from salib import extend, import_notebooks
 import_notebooks()
 import numpy as np
 from collections import defaultdict
 
-## In [24]:
+## In [3]:
 from Frame2D_Base import Frame2D
 import Frame2D_Input
 import Frame2D_Display
 
-## In [26]:
+## In [5]:
 @extend
 class Frame2D:
     
@@ -28,7 +28,7 @@ class Frame2D:
             K[np.ix_(dofnums,dofnums)] += Kg
         return K
 
-## In [28]:
+## In [7]:
 @extend
 class Frame2D:
     
@@ -40,7 +40,7 @@ class Frame2D:
             P[node.dofnums] += load.forces * factor
         return P
 
-## In [30]:
+## In [9]:
 @extend
 class Frame2D:
     
@@ -60,7 +60,7 @@ class Frame2D:
             MP[dofnums] -= gfefs
         return MP
 
-## In [31]:
+## In [10]:
 class ResultSet(object):
     
     """Instances of class ResultSet gather together all of the results from
@@ -75,7 +75,7 @@ class ResultSet(object):
         self.reaction_displacements = None # constrained node displacements
         self.reaction_forces = None        # constrained node reactions
 
-## In [32]:
+## In [11]:
 @extend
 class Frame2D:
     
