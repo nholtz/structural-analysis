@@ -1,4 +1,4 @@
-## Compiled from Tables.py on Wed May 25 09:03:12 2016
+## Compiled from Tables.py on Tue May 31 22:13:46 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -10,7 +10,7 @@ import hashlib
 from IPython.core.magic import register_cell_magic
 import re
 
-## In [3]:
+## In [2]:
 class Table(object):
     
     DSNAME = None     # default data set name
@@ -110,7 +110,7 @@ def signature(file_name):
     f.close()
     return m.hexdigest()
 
-## In [13]:
+## In [12]:
 @register_cell_magic('Table')
 def cell_table(line,cell):
     mo = re.match(r'\s*(\S+)\s*$',line)

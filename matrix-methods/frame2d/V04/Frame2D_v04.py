@@ -1,9 +1,9 @@
-## Compiled from Frame2D_v04.py on Fri May 27 21:22:01 2016
+## Compiled from Frame2D_v04.py on Tue May 31 19:25:47 2016
 
-## In [1]:
+## In [3]:
 from __future__ import print_function
 
-## In [2]:
+## In [4]:
 from salib import extend, import_notebooks
 import_notebooks()
 from Tables import Table
@@ -15,34 +15,13 @@ from MemberLoads import makeMemberLoad
 from collections import OrderedDict, defaultdict
 import numpy as np
 
-## In [3]:
-class Object(object):
-    pass
+## In [6]:
+from Frame2D_Base import Frame2D
 
-class Frame2D(object):
+## In [7]:
+@extend
+class Frame2D:
     
-    def __init__(self,dsname=None):
-        self.dsname = dsname
-        if dsname is not None:
-            Table.set_source(dsname)
-        self.reset()
-        
-    def reset(self):
-        self.rawdata = Object()
-        self.nodes = OrderedDict()
-        self.members = OrderedDict()
-        self.nodeloads = LoadSet()
-        self.memberloads = LoadSet()
-        self.loadcombinations = LoadCombination()
-        self.dofdesc = []
-        self.loadcase_fefs = {}
-        self.ndof = 0
-        self.nfree = 0
-        self.ncons = 0
-        self.R = None
-        self.D = None
-        self.PDF = None    # P-Delta forces
-        
     COLUMNS_xxx = [] # list of column names for table 'xxx'
         
     def get_table(self,tablename,extrasok=False,optional=False):
@@ -59,7 +38,7 @@ class Frame2D(object):
                 raise Exception('Extra columns {} for table "{}". Required columns are: {}'                               .format(list(prov-reqd),tablename,reqdl))
         return t
 
-## In [5]:
+## In [9]:
 @extend
 class Frame2D:
     
@@ -198,11 +177,40 @@ class Frame2D:
             if row.DIRN not in dirns:
                 raise ValueError("Invalid node load direction: {} for load {}, node {}; must be one of '{}'"
                                 .format(row.DIRN, row.LOAD, row.NODEID, ', '.join(dirns)))
+            if row.DIRN in n.constraints:
+                raise ValueError("Constrained node {} {} must not have load applied."
+                                .format(row.NODEID,row.DIRN))
             l = makeNodeLoad({row.DIRN:row.F})
             self.nodeloads.append(row.LOAD,n,l)
         self.rawdata.node_loads = table
 
 ## In [33]:
+@extend
+class Frame2D:
+    
+    COLUMNS_support_displacements = ('LOAD','NODEID','DIRN','DELTA')
+    
+    def install_support_displacements(self):
+        table = self.get_table('support_displacements',optional=True)
+        dirns = ['DX','DY','TZ']
+        forns = {'DX':'FX','DY':'FY','TZ':'MZ'}
+        for ix,row in table.data.iterrows():
+            n = self.get_node(row.NODEID)
+            if row.DIRN not in dirns:
+                raise ValueError("Invalid support displacements direction: {} for load {}, node {}; must be one of '{}'"
+                                .format(row.DIRN, row.LOAD, row.NODEID, ', '.join(dirns)))
+            fd = forns[row.DIRN]
+            if fd not in n.constraints:
+                raise ValueError("Support displacement, load: '{}'  node: '{}'  dirn: '{}' must be for a constrained node."
+                                .format(row.LOAD,row.NODEID,row.DIRN))
+            l = makeNodeLoad({fd:row.DELTA})
+            self.nodedeltas.append(row.LOAD,n,l)
+        self.rawdata.support_displacements = table
+
+## In [ ]:
+
+
+## In [37]:
 @extend
 class Frame2D:
     
@@ -216,7 +224,7 @@ class Frame2D:
             self.memberloads.append(row.LOAD,m,l)
         self.rawdata.member_loads = table
 
-## In [37]:
+## In [41]:
 @extend
 class Frame2D:
     
@@ -229,11 +237,12 @@ class Frame2D:
                 self.loadcombinations.append(row.CASE,row.LOAD,row.FACTOR)
         if 'all' not in self.loadcombinations:
             all = self.nodeloads.names.union(self.memberloads.names)
+            all = self.nodedeltas.names.union(all)
             for l in all:
                 self.loadcombinations.append('all',l,1.0)
         self.rawdata.load_combinations = table
 
-## In [40]:
+## In [44]:
 @extend
 class Frame2D:
 
@@ -241,11 +250,15 @@ class Frame2D:
         for o,l,f in self.loadcombinations.iterloads(casename,self.nodeloads):
             yield o,l,f
     
+    def iter_nodedeltas(self,casename):
+        for o,l,f in self.loadcombinations.iterloads(casename,self.nodedeltas):
+            yield o,l,f
+    
     def iter_memberloads(self,casename):
         for o,l,f in self.loadcombinations.iterloads(casename,self.memberloads):
             yield o,l,f
 
-## In [43]:
+## In [47]:
 @extend
 class Frame2D:
     
@@ -256,10 +269,11 @@ class Frame2D:
         self.install_releases()
         self.install_properties()
         self.install_node_loads()
+        self.install_support_displacements()
         self.install_member_loads()
         self.install_load_combinations()
 
-## In [45]:
+## In [49]:
 @extend
 class Frame2D:
     
@@ -281,7 +295,7 @@ class Frame2D:
                 node.dofnums[ix] = n
                 self.dofdesc[n] = (node,dirn)
 
-## In [48]:
+## In [52]:
 def prhead(txt,ul='='):
     """Print a heading and underline it."""
     print()
@@ -290,7 +304,7 @@ def prhead(txt,ul='='):
         print(ul*(len(txt)//len(ul)))
     print()
 
-## In [49]:
+## In [53]:
 @extend
 class Frame2D:
 
@@ -311,7 +325,7 @@ class Frame2D:
             node,dirn = self.dofdesc[i]
             print('{:>4d}   {:<4s}  {}'.format(i,node.id,dirn))
 
-## In [51]:
+## In [55]:
 @extend
 class Frame2D:
     
@@ -325,7 +339,7 @@ class Frame2D:
             rt = ','.join(sorted(memb.releases,key=lambda t: Member.RELEASES[t]))
             print('{:<7s}  {:<6s}  {:<6s}  {:>8.{precision}f}  {:>8.5f}  {:>8.5f}  {:<10s}  {:>10g}  {:>10g}  {}'                  .format(memb.id,nj.id,nk.id,memb.L,memb.dcx,memb.dcy,str(memb.size),memb.Ix,memb.A,rt,precision=precision))
 
-## In [53]:
+## In [57]:
 @extend
 class Frame2D:
     
@@ -350,6 +364,16 @@ class Frame2D:
         else:
             print(" - - - none - - -")
 
+        prhead('Support Displacements:')
+        if self.nodedeltas:
+            print('Type  Node      DX          DY          TZ')
+            print('----  ----  ----------  ----------  ----------')
+            for lname,node,load in self.nodedeltas:
+                print('{:<4s}  {:<4s}  {:>10.{precision}f}  {:>10.{precision}f}  {:>10.{precision}f}'
+                      .format(lname,node.id,load.fx,load.fy,load.mz,precision=precision))
+        else:
+            print(" - - - none - - -")
+
         prhead("Load Combinations:")
         if self.loadcombinations:
             print('Case   Type  Factor')
@@ -362,7 +386,7 @@ class Frame2D:
         else:
             print(" - - - none - - -")
 
-## In [55]:
+## In [59]:
 @extend
 class Frame2D:
     
@@ -391,7 +415,7 @@ class Frame2D:
         print('\n')
         self.print_loads()
 
-## In [57]:
+## In [61]:
 @extend
 class Frame2D:
     
@@ -405,17 +429,19 @@ class Frame2D:
             K[np.ix_(dofnums,dofnums)] += Kg
         return K
 
-## In [59]:
+## In [63]:
 @extend
 class Frame2D:
     
     def buildP(self,loadcase='all'):
         P = np.mat(np.zeros((self.ndof,1)))
         for node,load,factor in self.iter_nodeloads(loadcase):
+            P[node.dofnums] += load.forces * factor
+        for node,load,factor in self.iter_nodedeltas(loadcase):
             P[node.dofnums] += load.forces * factor
         return P
 
-## In [66]:
+## In [65]:
 @extend
 class Frame2D:
     
@@ -423,10 +449,8 @@ class Frame2D:
         P = np.mat(np.zeros((self.ndof,1)))
         for node,load,factor in self.iter_nodeloads(loadcase):
             P[node.dofnums] += load.forces * factor
-        for memb,mfefs in self.loadcase_fefs[loadcase].items():
-            gfefs = memb.Tm.T * mfefs.fefs
-            dofnums = memb.nodej.dofnums + memb.nodek.dofnums
-            P[dofnums] -= gfefs
+        for node,load,factor in self.iter_nodedeltas(loadcase):
+            P[node.dofnums] += load.forces * factor
         return P
 
     def calc_fefs(self,loadcase='all'):
@@ -434,18 +458,47 @@ class Frame2D:
         for memb,load,factor in self.iter_memberloads(loadcase):
             ll[memb].append((load,factor))
         fef = {memb:memb.fefs(loads) for memb,loads in ll.items()}
-        self.loadcase_fefs[loadcase] = fef
-        return fef
+        #self.loadcase_fefs[loadcase] = fef
+        return fef    
+
+    def buildMP(self,memb_fefs):
+        MP = np.mat(np.zeros((self.ndof,1)))
+        for memb,mfefs in memb_fefs.items():
+            gfefs = memb.Tm.T * mfefs.fefs
+            dofnums = memb.nodej.dofnums + memb.nodek.dofnums
+            MP[dofnums] -= gfefs
+        return MP
+
+## In [66]:
+class ResultSet(object):
+    
+    """Instances of class ResultSet gather together all of the results from
+    one complete structural analysis of one load case."""
+    
+    def __init__(self,loadcase):
+        self.loadcase = loadcase
+        self.node_P = None       # applied node loads
+        self.memb_P = None       # applied fixed end member forces
+        self.memb_fefs = {}      # fixed end member forces, indexed by member ID
+        self.node_displacements = None  # unconstrained node displacements
+        self.reaction_displacements = None # constrained node displacements
+        self.reaction_forces = None        # constrained node reactions
 
 ## In [67]:
 @extend
 class Frame2D:
     
     def solve(self,loadcase='all'):
+        
         self.number_dofs()
         K = self.buildK()
-        self.calc_fefs(loadcase)
-        P = self.buildP(loadcase)
+
+        rs = ResultSet(loadcase)
+        rs.memb_fefs = self.calc_fefs(loadcase)
+        P = rs.node_P = self.buildP(loadcase)
+        MP = rs.memb_P = self.buildMP(rs.memb_fefs)
+        P = P + MP
+        
         D = np.mat(np.zeros((self.ndof,1)))
         
         N = self.nfree
@@ -456,4 +509,39 @@ class Frame2D:
         
         D[:N] = np.linalg.solve(Kff,P[:N] - Kfc*D[N:])  # displacements
         R = Kcf*D[:N] + Kcc*D[N:] - P[N:]    # reactions at the constrained DOFs
-        return D,R
+        rs.node_displacements = D
+        rs.reaction_forces = R
+        return rs
+
+## In [72]:
+@extend
+class Frame2D:
+    
+    def print_node_displacements(self,D):
+        prhead('Node Displacements:')
+        print('Node        DX         DY      Rotation')
+        print('----      ------     ------   ---------')
+        for node in self.nodes.values():
+            d = D[node.dofnums]
+            print('{:<5s} {:>10.3f} {:>10.3f} {:>11.7f}'.format(node.id,d[0,0],d[1,0],d[2,0]))    
+
+## In [74]:
+@extend
+class Frame2D:
+    
+    def print_reactions(self,R,mult=[1E-3,1E-3,1E-6]):
+        prhead('Reactions:')
+        print('Node        FX         FY         MZ  ')
+        print('----     -------    -------    -------')
+        for node in self.nodes.values():
+            if node.constraints:
+                efs = ['--   '] * 3
+                for dirn in node.constraints:
+                    i = Node.DIRECTIONS[dirn]
+                    j = node.dofnums[i]
+                    val = R[j-self.nfree,0]
+                    efs[i] = '{:>10.3f}'.format(val*mult[i])
+                print('{:<5s} {:>10s} {:>10s} {:>10s}'.format(node.id, *efs))
+
+## In [ ]:
+
