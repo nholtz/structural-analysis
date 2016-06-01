@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Base.py on Tue May 31 20:14:30 2016
+## Compiled from Frame2D_Base.py on Wed Jun  1 14:17:21 2016
 
 ## In [2]:
 from __future__ import print_function
@@ -36,6 +36,22 @@ class Frame2D(object):
         self.R = None
         self.D = None
         self.PDF = None    # P-Delta forces
+
+## In [1]:
+class ResultSet(object):
+    
+    """Instances of class ResultSet gather together all of the results from
+    one complete structural analysis of one load case."""
+    
+    def __init__(self,loadcase):
+        self.loadcase = loadcase
+        self.node_P = None       # applied node loads
+        self.memb_P = None       # applied fixed end member forces
+        self.memb_fefs = {}      # fixed end member forces, indexed by member
+        self.node_displacements = None  # all node displacements
+        self.reaction_displacements = None # constrained node displacements
+        self.reaction_forces = None        # constrained node reactions
+        self.memb_efs = {}                 # member end forces, indexed by member
 
 ## In [ ]:
 

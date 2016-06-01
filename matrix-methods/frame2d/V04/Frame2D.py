@@ -1,13 +1,13 @@
-## Compiled from Frame2D.py on Tue May 31 23:27:40 2016
+## Compiled from Frame2D.py on Wed Jun  1 14:24:30 2016
 
-## In [10]:
+## In [3]:
 from salib import extend, import_notebooks
 import_notebooks()
 
-from Frame2D_Base import Frame2D
+from Frame2D_Base import Frame2D, ResultSet
 import Frame2D_Input
 import Frame2D_Display
-import Frame2D_SolveLinear
+import Frame2D_SolveFirstOrder
 
 ## In [ ]:
 

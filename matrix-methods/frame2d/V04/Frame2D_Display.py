@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Display.py on Tue May 31 23:23:05 2016
+## Compiled from Frame2D_Display.py on Wed Jun  1 14:09:21 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -137,7 +137,9 @@ class Frame2D:
 @extend
 class Frame2D:
     
-    def print_node_displacements(self,D):
+    def print_node_displacements(self,D=None,rs=None):
+        if rs is not None and D is None:
+            D = rs.node_displacements
         prhead('Node Displacements:')
         print('Node        DX         DY      Rotation')
         print('----      ------     ------   ---------')
@@ -149,7 +151,9 @@ class Frame2D:
 @extend
 class Frame2D:
     
-    def print_reactions(self,R,mult=[1E-3,1E-3,1E-6]):
+    def print_reactions(self,R=None,rs=None,mult=[1E-3,1E-3,1E-6]):
+        if R is None and rs is not None:
+            R = rs.reaction_forces
         prhead('Reactions:')
         print('Node        FX         FY         MZ  ')
         print('----     -------    -------    -------')
@@ -162,6 +166,31 @@ class Frame2D:
                     val = R[j-self.nfree,0]
                     efs[i] = '{:>10.3f}'.format(val*mult[i])
                 print('{:<5s} {:>10s} {:>10s} {:>10s}'.format(node.id, *efs))
+
+## In [19]:
+@extend
+class Frame2D:
+    
+    def print_mefs(self,rs,mult=[1E-3,1E-3,1E-6],precision=3):
+        prhead('Member End Forces:')
+        print('          /----- Axial -----/   /----- Shear -----/   /----- Moment ----/')
+        print('Member       FX J       FX K       FY J       FY K       MZ J       MZ K')
+        print('------     -------    -------    -------    -------    -------    -------')
+        for memb in self.members.values():
+            mefs = rs.member_efs[memb].fefs
+            fs = [mefs[i,0]*mult[i%len(mult)] for i in [0,3,1,4,2,5]]
+            s = ['{:>10.{precision}f}'.format(x,precision=precision) for x in fs]
+            print('{:<7s} {}'.format(memb.id,' '.join(s)))
+
+## In [21]:
+@extend
+class Frame2D:
+    
+    def print_results(self,rs):
+        prhead('Results for load case: {}'.format(rs.loadcase),ul='+')
+        self.print_node_displacements(rs=rs)
+        self.print_reactions(rs=rs)
+        self.print_mefs(rs=rs)
 
 ## In [ ]:
 
