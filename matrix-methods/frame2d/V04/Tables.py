@@ -1,10 +1,10 @@
-## Compiled from Tables.py on Tue May 31 22:13:46 2016
+## Compiled from Tables.py on Wed Jun  1 21:44:01 2016
 
 ## In [1]:
 from __future__ import print_function
 
 import pandas as pd
-import os.path
+import os, os.path
 import StringIO
 import hashlib
 from IPython.core.magic import register_cell_magic
@@ -30,7 +30,7 @@ class Table(object):
         cls.DSTYPE = ds_type
         cls.CELLDATA = {}
     
-    def __init__(self,table_name,ds_name=None,columns=None,index_col=None,optional=False):
+    def __init__(self,table_name,ds_name=None,columns=None,index_col=None,optional=False,data=[]):
         if ds_name is None and self.DSNAME is not None:
             ds_name = self.DSNAME
         self.ds_name = ds_name
@@ -40,7 +40,7 @@ class Table(object):
         self.columns = columns
         self.index_col = index_col
         self.optional = optional
-        self.data = pd.DataFrame(columns=columns)
+        self.data = pd.DataFrame(data,columns=columns)
         
     def _file_name(self,prefix=None):
         self.prefix = prefix
@@ -81,16 +81,22 @@ class Table(object):
         stream.close()
         return self.data
     
-    def write(self,file_name=None,precision=None,index=False,prefix=None):
-        if not file_name and prefix is None:
-            file_name = self.file_name
-        if not file_name:
-            file_name = self._file_name(prefix=prefix)
-        self.file_name = file_name
+    def write(self,ds_name=None,precision=None,index=False,prefix=None):
+        if ds_name is None:
+            ds_name = self.ds_name
+        dirname = ds_name + '.d'
+        if not os.path.exists(dirname):
+            os.mkdir(dirname)
+        if prefix is not None:
+            dirname = dirname + '/' + prefix
+            if not os.path.exists(dirname):
+                os.mkdir(dirname)
+        self.file_name = file_name = dirname + '/' + self.table_name + '.csv'
         float_format = None
         if precision is not None:
             float_format = '%.{:d}g'.format(precision)
         self.data.to_csv(file_name,index=index,float_format=float_format)
+        return file_name
         
     def basename(self,file_name=None):
         if file_name is None:
@@ -99,7 +105,7 @@ class Table(object):
     
     def signature(self):
         file_name = self.file_name
-        return (self.basename(),signature(file_name))
+        return (self.basename(),file_name,signature(file_name))
     
     def __len__(self):
         return len(self.data)
@@ -110,7 +116,7 @@ def signature(file_name):
     f.close()
     return m.hexdigest()
 
-## In [12]:
+## In [ ]:
 @register_cell_magic('Table')
 def cell_table(line,cell):
     mo = re.match(r'\s*(\S+)\s*$',line)
@@ -120,3 +126,6 @@ def cell_table(line,cell):
     global Table
     Table.DSTYPE = 'cell'
     Table.CELLDATA[table_name] = cell
+
+## In [ ]:
+
