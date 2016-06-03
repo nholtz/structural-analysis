@@ -1,4 +1,4 @@
-## Compiled from Frame2D_SolveFirstOrder.py on Wed Jun  1 15:04:02 2016
+## Compiled from Frame2D_SolveFirstOrder.py on Thu Jun  2 17:16:27 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -29,7 +29,7 @@ class Frame2D:
             K[np.ix_(dofnums,dofnums)] += Kg
         return K
 
-## In [17]:
+## In [7]:
 @extend
 class Frame2D:
     

@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Display.py on Wed Jun  1 14:09:21 2016
+## Compiled from Frame2D_Display.py on Thu Jun  2 17:15:25 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -167,7 +167,7 @@ class Frame2D:
                     efs[i] = '{:>10.3f}'.format(val*mult[i])
                 print('{:<5s} {:>10s} {:>10s} {:>10s}'.format(node.id, *efs))
 
-## In [19]:
+## In [18]:
 @extend
 class Frame2D:
     
@@ -182,7 +182,7 @@ class Frame2D:
             s = ['{:>10.{precision}f}'.format(x,precision=precision) for x in fs]
             print('{:<7s} {}'.format(memb.id,' '.join(s)))
 
-## In [21]:
+## In [19]:
 @extend
 class Frame2D:
     

@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Input.py on Tue May 31 23:22:33 2016
+## Compiled from Frame2D_Input.py on Thu Jun  2 22:33:34 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -44,7 +44,7 @@ class Frame2D:
     
     COLUMNS_nodes = ('NODEID','X','Y')
         
-    def install_nodes(self):
+    def input_nodes(self):
         node_table = self.get_table('nodes')
         for ix,r in node_table.data.iterrows():
             if r.NODEID in self.nodes:
@@ -74,7 +74,7 @@ class Frame2D:
     
     COLUMNS_supports = ('NODEID','C0','C1','C2')
     
-    def install_supports(self):
+    def input_supports(self):
         table = self.get_table('supports')
         for ix,row in table.data.iterrows():
             node = self.get_node(row.NODEID)
@@ -89,7 +89,7 @@ class Frame2D:
     
     COLUMNS_members = ('MEMBERID','NODEJ','NODEK')
     
-    def install_members(self):
+    def input_members(self):
         table = self.get_table('members')
         for ix,m in table.data.iterrows():
             if m.MEMBERID in self.members:
@@ -110,7 +110,7 @@ class Frame2D:
     
     COLUMNS_releases = ('MEMBERID','RELEASE')
     
-    def install_releases(self):
+    def input_releases(self):
         table = self.get_table('releases',optional=True)
         for ix,r in table.data.iterrows():
             memb = self.get_member(r.MEMBERID)
@@ -133,7 +133,7 @@ class Frame2D:
     
     COLUMNS_properties = ('MEMBERID','SIZE','IX','A')
     
-    def install_properties(self):
+    def input_properties(self):
         table = self.get_table('properties')
         table = self.fill_properties(table)
         for ix,row in table.data.iterrows():
@@ -169,7 +169,7 @@ class Frame2D:
     
     COLUMNS_node_loads = ('LOAD','NODEID','DIRN','F')
     
-    def install_node_loads(self):
+    def input_node_loads(self):
         table = self.get_table('node_loads')
         dirns = ['FX','FY','FZ']
         for ix,row in table.data.iterrows():
@@ -190,7 +190,7 @@ class Frame2D:
     
     COLUMNS_support_displacements = ('LOAD','NODEID','DIRN','DELTA')
     
-    def install_support_displacements(self):
+    def input_support_displacements(self):
         table = self.get_table('support_displacements',optional=True)
         dirns = ['DX','DY','TZ']
         forns = {'DX':'FX','DY':'FY','TZ':'MZ'}
@@ -213,7 +213,7 @@ class Frame2D:
     
     COLUMNS_member_loads = ('LOAD','MEMBERID','TYPE','W1','W2','A','B','C')
     
-    def install_member_loads(self):
+    def input_member_loads(self):
         table = self.get_table('member_loads')
         for ix,row in table.data.iterrows():
             m = self.get_member(row.MEMBERID)
@@ -227,7 +227,7 @@ class Frame2D:
     
     COLUMNS_load_combinations = ('CASE','LOAD','FACTOR')
     
-    def install_load_combinations(self):
+    def input_load_combinations(self):
         table = self.get_table('load_combinations',optional=True)
         if len(table) > 0:
             for ix,row in table.data.iterrows():
@@ -281,19 +281,19 @@ class Frame2D:
 @extend
 class Frame2D:
     
-    def install_all(self):
-        self.install_nodes()
-        self.install_supports()
-        self.install_members()
-        self.install_releases()
-        self.install_properties()
-        self.install_node_loads()
-        self.install_support_displacements()
-        self.install_member_loads()
-        self.install_load_combinations()
-        self.install_finish()
+    def input_all(self):
+        self.input_nodes()
+        self.input_supports()
+        self.input_members()
+        self.input_releases()
+        self.input_properties()
+        self.input_node_loads()
+        self.input_support_displacements()
+        self.input_member_loads()
+        self.input_load_combinations()
+        self.input_finish()
         
-    def install_finish(self):
+    def input_finish(self):
         self.number_dofs()
 
 ## In [ ]:
