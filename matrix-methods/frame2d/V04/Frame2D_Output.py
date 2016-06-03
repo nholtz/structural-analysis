@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Output.py on Fri Jun  3 10:57:49 2016
+## Compiled from Frame2D_Output.py on Fri Jun  3 12:57:36 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -135,11 +135,17 @@ class Frame2D:
     def list_signatures(self):
         return [t.signature() for tn,t in vars(self.rawdata).items() if type(t) is Table]
 
-## In [44]:
+## In [1]:
+import os, os.path
+
 @extend
 class Frame2D:
     
-    def write_all(self,ds_name):
+    def write_all(self,ds_name,mkdir=False):
+        if mkdir:
+            dname = ds_name + '.d'
+            if not os.path.exists(dname):
+                os.mkdir(dname)
         self.write_table('nodes',ds_name)
         self.write_table('supports',ds_name)
         self.write_table('members',ds_name)
