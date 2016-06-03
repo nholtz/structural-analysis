@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Output.py on Fri Jun  3 12:57:36 2016
+## Compiled from Frame2D_Output.py on Fri Jun  3 18:11:52 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -21,17 +21,17 @@ f.input_all()
 @extend
 class Frame2D:
     
-    def write_table(self,table_name,ds_name=None,prefix=None,record=True):
+    def write_table(self,table_name,ds_name=None,prefix=None,record=True,precision=None,args=()):
         t = getattr(self.rawdata,table_name,None)
         if t is None:
             methodname = 'list_'+table_name
             method = getattr(self,methodname,None)
             if method and callable(method):
-                data = method()
+                data = method(*args)
                 t = Table(table_name,data=data,columns=getattr(self,'COLUMNS_'+table_name))
         if t is None:
             raise ValueError("Unable to find table '{}'".format(table_name))
-        t.write(ds_name=ds_name,prefix=prefix)
+        t.write(ds_name=ds_name,prefix=prefix,precision=precision)
         if record:
             setattr(self.rawdata,table_name,t)
         return t            
@@ -97,7 +97,7 @@ class Frame2D:
     
     def list_support_displacements(self):
         ans = []
-        dirns = ['DX','DY','TZ']
+        dirns = ['DX','DY','RZ']
         for loadid,node,nload in self.nodedeltas:
             for i in [0,1,2]:
                 if nload[i]:
@@ -135,7 +135,7 @@ class Frame2D:
     def list_signatures(self):
         return [t.signature() for tn,t in vars(self.rawdata).items() if type(t) is Table]
 
-## In [1]:
+## In [44]:
 import os, os.path
 
 @extend
@@ -156,6 +156,69 @@ class Frame2D:
         self.write_table('member_loads',ds_name)
         self.write_table('load_combinations',ds_name)
         self.write_table('signatures',ds_name,record=False)
+
+## In [48]:
+@extend
+class Frame2D:
+    
+    COLUMNS_node_displacements = ['NODEID','DX','DY','RZ']
+    
+    def list_node_displacements(self,rs):
+        if not hasattr(rs,'node_displacements'):
+            return []
+        ans = []
+        D = rs.node_displacements
+        for node in self.nodes.values():
+            d = D[node.dofnums]
+            ans.append((node.id,d[0,0],d[1,0],d[2,0]))
+        return ans
+
+## In [51]:
+@extend
+class Frame2D:
+    
+    COLUMNS_reaction_forces = ['NODEID','FX','FY','FZ']
+    
+    def list_reaction_forces(self,rs):
+        if not hasattr(rs,'reaction_forces'):
+            return []
+        R = rs.reaction_forces
+        ans = []
+        for node in self.nodes.values():
+            if node.constraints:
+                l = [node.id,None,None,None]
+                for dirn in node.constraints:
+                    i = node.DIRECTIONS[dirn]
+                    j = node.dofnums[i]
+                    val = R[j-self.nfree,0]
+                    l[i+1] = val
+                ans.append(l)
+        return ans
+
+## In [54]:
+@extend
+class Frame2D:
+    
+    COLUMNS_member_end_forces = 'MEMBERID,FXJ,FYJ,MZJ,FXK,FYK,MZK'.split(',')
+    
+    def list_member_end_forces(self,rs):
+        if not hasattr(rs,'member_efs'):
+            return []
+        mefs = rs.member_efs
+        ans = []
+        for memb in self.members.values():
+            efs = mefs[memb].fefs
+            ans.append((memb.id,efs[0,0],efs[1,0],efs[2,0],efs[3,0],efs[4,0],efs[5,0]))
+        return ans
+
+## In [57]:
+@extend
+class Frame2D:
+    
+    def write_results(self,ds_name,rs):
+        self.write_table('node_displacements',ds_name=ds_name,prefix=rs.loadcase,record=False,precision=15,args=(rs,))
+        self.write_table('reaction_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,precision=15,args=(rs,))
+        self.write_table('member_end_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,precision=15,args=(rs,))
 
 ## In [ ]:
 

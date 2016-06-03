@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Input.py on Fri Jun  3 09:19:44 2016
+## Compiled from Frame2D_Input.py on Fri Jun  3 16:57:29 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -192,7 +192,7 @@ class Frame2D:
     
     def input_support_displacements(self):
         table = self.get_table('support_displacements',optional=True)
-        forns = {'DX':'FX','DY':'FY','TZ':'MZ'}
+        forns = {'DX':'FX','DY':'FY','RZ':'MZ'}
         for ix,row in table.data.iterrows():
             n = self.get_node(row.NODEID)
             if row.DIRN not in forns:
