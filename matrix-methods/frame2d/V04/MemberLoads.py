@@ -1,4 +1,4 @@
-## Compiled from MemberLoads.py on Wed Jun  1 14:18:42 2016
+## Compiled from MemberLoads.py on Fri Jun  3 10:21:23 2016
 
 ## In [1]:
 from __future__ import division, print_function
@@ -110,7 +110,7 @@ class MemberLoad(object):
     
     def fefs(self):
         """Return the complete set of 6 fixed end forces produced by the load."""
-        raise NotImplementedError()
+        raise NotImplementedError()       
         
     def shear(self,x):
         """Return the shear force that is in equilibrium with that
@@ -351,6 +351,14 @@ def makeMemberLoad(L,data,ltype=None):
             argv = {k:data[MAP[k]] for k in MAP.keys()}
             return c(L,**argv)
     raise Exception('Invalid load type: {}'.format(ltype))
+
+## In [27]:
+def unmakeMemberLoad(load):
+    type = load.__class__.__name__
+    ans = {'TYPE':type}
+    for a,col in load.TABLE_MAP.items():
+        ans[col] = getattr(load,a)
+    return ans
 
 ## In [ ]:
 

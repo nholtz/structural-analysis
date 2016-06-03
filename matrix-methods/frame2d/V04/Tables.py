@@ -1,4 +1,4 @@
-## Compiled from Tables.py on Wed Jun  1 21:44:01 2016
+## Compiled from Tables.py on Fri Jun  3 10:21:23 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -105,7 +105,7 @@ class Table(object):
     
     def signature(self):
         file_name = self.file_name
-        return (self.basename(),file_name,signature(file_name))
+        return (self.table_name,file_name,signature(file_name))
     
     def __len__(self):
         return len(self.data)
@@ -116,7 +116,7 @@ def signature(file_name):
     f.close()
     return m.hexdigest()
 
-## In [ ]:
+## In [12]:
 @register_cell_magic('Table')
 def cell_table(line,cell):
     mo = re.match(r'\s*(\S+)\s*$',line)

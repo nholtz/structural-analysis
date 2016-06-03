@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Input.py on Thu Jun  2 22:33:34 2016
+## Compiled from Frame2D_Input.py on Fri Jun  3 09:19:44 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -192,13 +192,12 @@ class Frame2D:
     
     def input_support_displacements(self):
         table = self.get_table('support_displacements',optional=True)
-        dirns = ['DX','DY','TZ']
         forns = {'DX':'FX','DY':'FY','TZ':'MZ'}
         for ix,row in table.data.iterrows():
             n = self.get_node(row.NODEID)
-            if row.DIRN not in dirns:
+            if row.DIRN not in forns:
                 raise ValueError("Invalid support displacements direction: {} for load {}, node {}; must be one of '{}'"
-                                .format(row.DIRN, row.LOAD, row.NODEID, ', '.join(dirns)))
+                                .format(row.DIRN, row.LOAD, row.NODEID, ', '.join(forns.keys())))
             fd = forns[row.DIRN]
             if fd not in n.constraints:
                 raise ValueError("Support displacement, load: '{}'  node: '{}'  dirn: '{}' must be for a constrained node."
