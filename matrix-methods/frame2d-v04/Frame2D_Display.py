@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Display.py on Thu Jun  2 17:15:25 2016
+## Compiled from Frame2D_Display.py on Fri Jun  3 21:13:03 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -192,5 +192,36 @@ class Frame2D:
         self.print_reactions(rs=rs)
         self.print_mefs(rs=rs)
 
-## In [ ]:
+## In [20]:
+import numpy as np
+import matplotlib.pyplot as plt
 
+@extend
+class Frame2D:
+    
+    def show(self):
+        """Draw the frame geometry."""
+        # reformat the coordinates to that expected by plt.plot()
+        # (where each column of x is plotted against the corresponding column of y)
+        # Thus each column of x contains the x-coords at either end of member; y similar
+        n = len(self.members)
+        x = np.zeros((2,n))
+        y = np.zeros((2,n))
+        for j,m in enumerate(self.members.values()):
+            x[0,j] = m.nodej.x
+            x[1,j] = m.nodek.x
+            y[0,j] = m.nodej.y
+            y[1,j] = m.nodek.y
+        # size and set the drawing limits s.t. x- and y-scales are roughly the same
+        xmin = np.min(x)
+        xmax = np.max(x)
+        ymin = np.min(y)
+        ymax = np.max(y)
+        size = max(xmax-xmin,ymax-ymin)*1.05
+        xmid = (xmax+xmin)/2.
+        ymid = (ymax+ymin)/2.
+        
+        plt.figure(figsize=(8.,8.))
+        plt.axis([xmid-size/2.,xmid+size/2.,ymid-size/2.,ymid+size/2.])
+        plt.grid(True)
+        plt.plot(x,y,'b-')
