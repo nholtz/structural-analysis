@@ -1,4 +1,4 @@
-## Compiled from Tables.py on Fri Jun  3 12:49:07 2016
+## Compiled from Tables.py on Sat Jun  4 17:36:57 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -10,23 +10,24 @@ import hashlib
 from IPython.core.magic import register_cell_magic
 import re
 
-## In [20]:
+## In [2]:
 class Table(object):
     
     DSNAME = None     # default data set name
     DSTYPE = 'dir'    # someday we will allow 'zip' for zip archives
     #DSTYPE = 'cell'  # for CSV data provided via %%Table cell magic
     #DSTYPE = 'data'  # for dataframe data provided directly
-    CELLDATA = {}
+    CELLDATA = {}     # csv text from %%Table magic cells, indexed by table name
+    DATAFRAMES = {}   # dataframes directly provided by client, indexed by table name
     
     @classmethod
     def set_source(cls,ds_name,ds_type=None):
         if ds_type is None:
-            dirname = ds_name + '.d'
+            dirname = 'data/' + ds_name + '.d'
             if os.path.exists(dirname):
                 ds_type = 'dir'
             else:
-                ds_type = 'cell'
+                ds_type = 'unknown'
         assert ds_type in ['dir','cell','data']
         cls.DSNAME = ds_name
         cls.DSTYPE = ds_type
@@ -52,11 +53,10 @@ class Table(object):
         
     def _file_name(self,prefix=None):
         self.prefix = prefix
+        n = self.table_name
         if prefix:
-            n = prefix + '-' + self.table_name
-        else:
-            n = self.table_name
-        return self.ds_name + '.d/' + n + '.csv'
+            n = prefix + '/' + self.table_name
+        return 'data/' + self.ds_name + '.d/' + n + '.csv'
         
     def read(self,file_name=None,optional=None):
         if optional is None:
@@ -96,15 +96,15 @@ class Table(object):
         stream.close()
         return self.data
     
-    def write(self,ds_name=None,precision=None,index=False,prefix=None):
+    def write(self,ds_name=None,precision=None,index=False,prefix=None,makedir=False):
         if ds_name is None:
             ds_name = self.ds_name
-        dirname = ds_name + '.d'
-        if not os.path.exists(dirname):
+        dirname = 'data/' + ds_name + '.d'
+        if makedir and not os.path.exists(dirname):
             os.mkdir(dirname)
         if prefix is not None:
             dirname = dirname + '/' + prefix
-            if not os.path.exists(dirname):
+            if makedir and not os.path.exists(dirname):
                 os.mkdir(dirname)
         self.file_name = file_name = dirname + '/' + self.table_name + '.csv'
         float_format = None
@@ -141,3 +141,6 @@ def cell_table(line,cell):
     global Table
     Table.DSTYPE = 'cell'
     Table.CELLDATA[table_name] = cell
+
+## In [ ]:
+

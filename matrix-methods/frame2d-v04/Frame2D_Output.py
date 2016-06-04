@@ -1,11 +1,10 @@
-## Compiled from Frame2D_Output.py on Fri Jun  3 18:11:52 2016
+## Compiled from Frame2D_Output.py on Sat Jun  4 16:39:23 2016
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
 from salib import extend, import_notebooks
-import_notebooks()
 from Tables import Table
 
 ## In [3]:

@@ -1,11 +1,10 @@
-## Compiled from Frame2D_SolveFirstOrder.py on Thu Jun  2 17:16:27 2016
+## Compiled from Frame2D_SolveFirstOrder.py on Sat Jun  4 16:39:25 2016
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
 from salib import extend, import_notebooks
-import_notebooks()
 import numpy as np
 from collections import defaultdict
 

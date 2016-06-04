@@ -1,0 +1,5 @@
+LOAD,NODEID,DIRN,F
+wind,H,FX,15000
+wind,G,FX,35000
+notional,H,FX,6900
+notional,G,FX,8400

@@ -1,11 +1,10 @@
-## Compiled from Frame2D_Display.py on Fri Jun  3 21:13:03 2016
+## Compiled from Frame2D_Display.py on Sat Jun  4 18:20:31 2016
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
 from salib import extend, import_notebooks
-import_notebooks()
 from Nodes import Node
 from Members import Member
 
@@ -65,41 +64,41 @@ class Frame2D:
         
         prhead('Node Loads:')
         if self.nodeloads:
-            print('Type  Node      FX          FY          MZ')
-            print('----  ----  ----------  ----------  ----------')
+            print('Type      Node      FX          FY          MZ')
+            print('----      ----  ----------  ----------  ----------')
             for lname,node,load in self.nodeloads:
-                print('{:<4s}  {:<4s}  {:>10.{precision}f}  {:>10.{precision}f}  {:>10.{precision}f}'
+                print('{:<8s}  {:<4s}  {:>10.{precision}f}  {:>10.{precision}f}  {:>10.{precision}f}'
                       .format(lname,node.id,load.fx,load.fy,load.mz,precision=precision))
         else:
             print(" - - - none - - -")
 
         prhead('Member Loads:')
         if self.memberloads:
-            print('Type  Member  Load')
-            print('----  ------  ----------------')
+            print('Type      Member  Load')
+            print('----      ------  ----------------')
             for lname,memb,load in self.memberloads:
-                print("{:<4s}  {:<6s}  {}".format(lname,memb.id,load))
+                print("{:<8s}  {:<6s}  {}".format(lname,memb.id,load))
         else:
             print(" - - - none - - -")
 
         prhead('Support Displacements:')
         if self.nodedeltas:
-            print('Type  Node      DX          DY          TZ')
-            print('----  ----  ----------  ----------  ----------')
+            print('Type      Node      DX          DY          TZ')
+            print('----      ----  ----------  ----------  ----------')
             for lname,node,load in self.nodedeltas:
-                print('{:<4s}  {:<4s}  {:>10.{precision}f}  {:>10.{precision}f}  {:>10.{precision}f}'
+                print('{:<8s}  {:<4s}  {:>10.{precision}f}  {:>10.{precision}f}  {:>10.{precision}f}'
                       .format(lname,node.id,load.fx,load.fy,load.mz,precision=precision))
         else:
             print(" - - - none - - -")
 
         prhead("Load Combinations:")
         if self.loadcombinations:
-            print('Case   Type  Factor')
-            print('-----  ----  ------')
+            print('Case   Type      Factor')
+            print('-----  ----      ------')
             prev = None
             for cname,lname,f in self.loadcombinations:
                 cn = ' '*(len(prev)//2)+'"' if cname == prev else cname
-                print("{:<5s}  {:<4s}  {:>6.2f}".format(cn,lname,f))
+                print("{:<5s}  {:<8s}  {:>6.2f}".format(cn,lname,f))
                 prev = cname
         else:
             print(" - - - none - - -")

@@ -1,11 +1,10 @@
-## Compiled from Frame2D_Input.py on Fri Jun  3 16:57:29 2016
+## Compiled from Frame2D_Input.py on Sat Jun  4 17:40:25 2016
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
 from salib import extend, import_notebooks
-import_notebooks()
 from Tables import Table
 from Nodes import Node
 from Members import Member

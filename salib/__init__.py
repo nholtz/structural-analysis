@@ -62,7 +62,7 @@ def showImage(basename,rescan=False):
     else:
         raise Exception("Unable to find image '{0}'; Tried these extensions: {1}".format(basename,EXTS))
 
-from NBImporter import import_notebooks
+#from NBImporter import import_notebooks
 
 def extend_old(old):
     """This is used as a class decorator to 'extend' class definitions,

@@ -1,8 +1,7 @@
-## Compiled from Frame2D.py on Fri Jun  3 10:57:06 2016
+## Compiled from Frame2D.py on Sat Jun  4 17:40:24 2016
 
-## In [3]:
+## In [1]:
 from salib import extend, import_notebooks
-import_notebooks()
 
 from Frame2D_Base import Frame2D, ResultSet
 import Frame2D_Input
