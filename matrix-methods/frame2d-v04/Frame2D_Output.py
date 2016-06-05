@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Output.py on Sat Jun  4 16:39:23 2016
+## Compiled from Frame2D_Output.py on Sat Jun  4 22:34:41 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -20,7 +20,7 @@ f.input_all()
 @extend
 class Frame2D:
     
-    def write_table(self,table_name,ds_name=None,prefix=None,record=True,precision=None,args=()):
+    def write_table(self,table_name,ds_name=None,prefix=None,record=True,precision=None,args=(),makedir=False):
         t = getattr(self.rawdata,table_name,None)
         if t is None:
             methodname = 'list_'+table_name
@@ -30,7 +30,7 @@ class Frame2D:
                 t = Table(table_name,data=data,columns=getattr(self,'COLUMNS_'+table_name))
         if t is None:
             raise ValueError("Unable to find table '{}'".format(table_name))
-        t.write(ds_name=ds_name,prefix=prefix,precision=precision)
+        t.write(ds_name=ds_name,prefix=prefix,precision=precision,makedir=makedir)
         if record:
             setattr(self.rawdata,table_name,t)
         return t            
@@ -176,7 +176,7 @@ class Frame2D:
 @extend
 class Frame2D:
     
-    COLUMNS_reaction_forces = ['NODEID','FX','FY','FZ']
+    COLUMNS_reaction_forces = ['NODEID','FX','FY','MZ']
     
     def list_reaction_forces(self,rs):
         if not hasattr(rs,'reaction_forces'):
@@ -215,9 +215,12 @@ class Frame2D:
 class Frame2D:
     
     def write_results(self,ds_name,rs):
-        self.write_table('node_displacements',ds_name=ds_name,prefix=rs.loadcase,record=False,precision=15,args=(rs,))
-        self.write_table('reaction_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,precision=15,args=(rs,))
-        self.write_table('member_end_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,precision=15,args=(rs,))
+        self.write_table('node_displacements',ds_name=ds_name,prefix=rs.loadcase,record=False,
+                         precision=15,args=(rs,),makedir=True)
+        self.write_table('reaction_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,
+                         precision=15,args=(rs,))
+        self.write_table('member_end_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,
+                         precision=15,args=(rs,))
 
 ## In [ ]:
 
