@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Base.py on Wed Jun  1 14:17:21 2016
+## Compiled from Frame2D_Base.py on Sun Jun  5 18:03:12 2016
 
 ## In [2]:
 from __future__ import print_function
@@ -51,7 +51,7 @@ class ResultSet(object):
         self.node_displacements = None  # all node displacements
         self.reaction_displacements = None # constrained node displacements
         self.reaction_forces = None        # constrained node reactions
-        self.memb_efs = {}                 # member end forces, indexed by member
+        self.member_efs = {}                 # member end forces, indexed by member
 
 ## In [ ]:
 
