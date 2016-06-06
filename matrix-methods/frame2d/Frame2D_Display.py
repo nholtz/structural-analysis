@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Display.py on Sun Jun  5 22:21:57 2016
+## Compiled from Frame2D_Display.ipynb on Mon Jun  6 14:22:01 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -212,12 +212,12 @@ class Frame2D:
 @extend
 class Frame2D:
     
-    def print_results(self,rs):
+    def print_results(self,rs,mult=[1E-3,1E-3,1E-6]):
         prhead('Results for load case: {}'.format(rs.loadcase),ul='+')
         self.print_node_displacements(rs=rs)
-        self.print_pdelta_forces(rs=rs)
-        self.print_reactions(rs=rs)
-        self.print_mefs(rs=rs)
+        self.print_pdelta_forces(rs=rs,mult=mult)
+        self.print_reactions(rs=rs,mult=mult)
+        self.print_mefs(rs=rs,mult=mult)
 
 ## In [ ]:
 import numpy as np

@@ -1,4 +1,4 @@
-## Compiled from MemberLoads.py on Fri Jun  3 10:21:23 2016
+## Compiled from MemberLoads.ipynb on Mon Jun  6 14:12:04 2016
 
 ## In [1]:
 from __future__ import division, print_function
@@ -196,6 +196,45 @@ class PL:
         return (self.a,None,1)
 
 ## In [20]:
+class PLA(MemberLoad):
+    
+    TABLE_MAP = {'P':'W1','a':'A'}
+    
+    def __init__(self,L,P,a):
+        self.L = L
+        self.P = P
+        self.a = a
+        
+    def fefs(self):
+        P = self.P
+        L = self.L
+        a = self.a
+        c0 = -P*(L-a)/L
+        c3 = -P*a/L
+        return EF(c0=c0,c3=c3)
+    
+    def shear(self,x):
+        return 0.
+    
+    def moment(self,x):
+        return 0.
+        
+    def __repr__(self):
+        return '{}(L={},P={},a={})'.format(self.__class__.__name__,self.L,self.P,self.a)
+
+## In [23]:
+@extend
+class PLA:
+    
+    @property
+    def vpts(self):
+        return (0.,self.L,0)
+    
+    @property
+    def mpts(self):
+        return (0.,self.L,0)
+
+## In [24]:
 class UDL(MemberLoad):
     
     TABLE_MAP = {'w':'W1'}
@@ -229,7 +268,7 @@ class UDL(MemberLoad):
     def mpts(self):
         return (0.,self.L,2)
 
-## In [22]:
+## In [26]:
 class LVL(MemberLoad):
     
     TABLE_MAP = {'w1':'W1','w2':'W2','a':'A','b':'B','c':'C'}
@@ -296,7 +335,7 @@ class LVL(MemberLoad):
     def mpts(self):
         return (self.a,self.a+self.b,2 if self.w1==self.w2 else 3)
 
-## In [23]:
+## In [27]:
 class CM(MemberLoad):
     
     TABLE_MAP = {'M':'W1','a':'A'}
@@ -334,7 +373,7 @@ class CM(MemberLoad):
     def __repr__(self):
         return '{}(L={},M={},a={})'.format(self.__class__.__name__,self.L,self.M,self.a)
 
-## In [24]:
+## In [28]:
 def makeMemberLoad(L,data,ltype=None):
     def all_subclasses(cls):
         _all_subclasses = []
@@ -352,7 +391,7 @@ def makeMemberLoad(L,data,ltype=None):
             return c(L,**argv)
     raise Exception('Invalid load type: {}'.format(ltype))
 
-## In [27]:
+## In [30]:
 def unmakeMemberLoad(load):
     type = load.__class__.__name__
     ans = {'TYPE':type}
