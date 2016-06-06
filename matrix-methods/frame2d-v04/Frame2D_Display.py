@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Display.py on Sat Jun  4 18:20:31 2016
+## Compiled from Frame2D_Display.py on Sun Jun  5 22:21:57 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -132,7 +132,34 @@ class Frame2D:
         print('\n')
         self.print_loads()
 
-## In [14]:
+## In [23]:
+@extend
+class Frame2D:
+    
+    COLUMNS_pdelta_forces = ['NODEID','FX','FY','MZ']
+    
+    def list_pdelta_forces(self,rs,):
+        ans = []
+        if not rs.pdelta:
+            return ans
+        pdf = rs.pdelta_forces
+        for node in self.nodes.values():
+            p = pdf[node.dofnums]
+            if p[0,0] or p[1,0] or p[2,0]:
+                ans.append((node.id,p[0,0],p[1,0],p[2,0]))
+        return ans
+    
+    def print_pdelta_forces(self,rs,mult=[1e-3,1e-3,1e-6]):
+        plist = self.list_pdelta_forces(rs)
+        if not plist:
+            return
+        prhead('P-Delta Node Forces:')
+        print('Node        FX         FY         MZ  ')
+        print('----     -------    -------    -------')
+        for nid,fx,fy,mz in plist:
+            print('{:<5s} {:>10.3f} {:>10.3f} {:>11.7f}'.format(nid,fx*mult[0],fy*mult[1],mz*mult[2]))
+
+## In [24]:
 @extend
 class Frame2D:
     
@@ -146,7 +173,7 @@ class Frame2D:
             d = D[node.dofnums]
             print('{:<5s} {:>10.3f} {:>10.3f} {:>11.7f}'.format(node.id,d[0,0],d[1,0],d[2,0]))    
 
-## In [16]:
+## In [26]:
 @extend
 class Frame2D:
     
@@ -166,7 +193,7 @@ class Frame2D:
                     efs[i] = '{:>10.3f}'.format(val*mult[i])
                 print('{:<5s} {:>10s} {:>10s} {:>10s}'.format(node.id, *efs))
 
-## In [18]:
+## In [28]:
 @extend
 class Frame2D:
     
@@ -181,17 +208,18 @@ class Frame2D:
             s = ['{:>10.{precision}f}'.format(x,precision=precision) for x in fs]
             print('{:<7s} {}'.format(memb.id,' '.join(s)))
 
-## In [19]:
+## In [29]:
 @extend
 class Frame2D:
     
     def print_results(self,rs):
         prhead('Results for load case: {}'.format(rs.loadcase),ul='+')
         self.print_node_displacements(rs=rs)
+        self.print_pdelta_forces(rs=rs)
         self.print_reactions(rs=rs)
         self.print_mefs(rs=rs)
 
-## In [20]:
+## In [ ]:
 import numpy as np
 import matplotlib.pyplot as plt
 

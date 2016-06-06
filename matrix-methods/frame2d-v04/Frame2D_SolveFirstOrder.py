@@ -1,4 +1,4 @@
-## Compiled from Frame2D_SolveFirstOrder.py on Sun Jun  5 12:12:41 2016
+## Compiled from Frame2D_SolveFirstOrder.py on Sun Jun  5 22:12:13 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -133,6 +133,7 @@ class Frame2D:
         if pdelta:
             niter = 0 
             self.columns = [m for m in self.members.values() if abs(m.dcy) >= 0.95]
+            rs.pdelta = True
             while True:
                 if niter > maxniter:
                     raise Exception('Too many iterations.  Giving up.  Solution not usable.')

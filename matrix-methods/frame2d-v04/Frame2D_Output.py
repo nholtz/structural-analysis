@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Output.py on Sat Jun  4 22:34:41 2016
+## Compiled from Frame2D_Output.py on Sun Jun  5 22:21:56 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -221,6 +221,9 @@ class Frame2D:
                          precision=15,args=(rs,))
         self.write_table('member_end_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,
                          precision=15,args=(rs,))
+        if rs.pdelta:
+            self.write_table('pdelta_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,
+                             precision=15,args=(rs,))
 
 ## In [ ]:
 
