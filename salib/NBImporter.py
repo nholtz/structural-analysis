@@ -14,13 +14,21 @@
 # from NBImporter import import_notebooks   # or some such
 # import_notebooks()                        # to enable the importer
 # ```
+# 
+# Note that ```salib``` has a module that enabales the importer automatically.
+# Using that, all you have to do is:
+# 
+# ```
+# from salib import import_notebooks
+# ```
+# 
 # #### Implementation Method
 # The basic method is to translate
 # the notebook file to a Python (`.py`) file (but only if necessary) 
 # and then letting the normal import mechanism handle that (which
 # means it can also be compiled to a `.pyc file`).  The `.find_module()`
-# does that when it locates the proper `.ipynb` file, then returns
-# None to indicate it didn't find anything.  The importer will then try
+# does the compiling to `.py` when it locates the proper `.ipynb` file, then returns
+# `None` to indicate it didn't find anything.  The importer will then try
 # the next import method in the chain.
 
 # In[1]:
@@ -107,7 +115,7 @@ class NotebookImporter(object):
             nb = nbformat.read(f,self.NBVERSION)
         
         with io.open(py_path,'w',encoding='utf-8') as pyf:
-            pyf.write(u'## Compiled from {} on {}\n'.format(py_path,time.ctime()))
+            pyf.write(u'## Compiled from {} on {}\n'.format(nb_path,time.ctime()))
             for cell in nb['cells']:
                 if cell['cell_type'] == 'code':
                     # transform the input to executable Python
