@@ -1,4 +1,4 @@
-## Compiled from Tables.ipynb on Tue Jun  7 15:10:16 2016
+## Compiled from Tables.ipynb on Tue Jun  7 20:40:00 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -13,6 +13,7 @@ import re
 ## In [2]:
 class Table(object):
     
+    ROOT = 'data'
     DSNAME = None     # default data set name
     DSTYPE = 'dir'    # someday we will allow 'zip' for zip archives
     #DSTYPE = 'cell'  # for CSV data provided via %%Table cell magic
@@ -21,41 +22,46 @@ class Table(object):
     DATAFRAMES = {}   # dataframes directly provided by client, indexed by table name
     
     @classmethod
-    def set_source(cls,ds_name,ds_type=None):
-        if ds_type is None:
-            dirname = 'data/' + ds_name + '.d'
+    def set_root(cls,root):
+        assert os.path.exists(root)
+        cls.ROOT = root
+    
+    @classmethod
+    def set_source(cls,dsname,dstype=None):
+        if dstype is None:
+            dirname = cls.ROOT + '/' + dsname + '.d'
             if os.path.exists(dirname):
-                ds_type = 'dir'
+                dstype = 'dir'
             else:
-                ds_type = 'unknown'
-        assert ds_type in ['dir','cell','data']
-        cls.DSNAME = ds_name
-        cls.DSTYPE = ds_type
+                dstype = 'unknown'
+        assert dstype in ['dir','cell','data']
+        cls.DSNAME = dsname
+        cls.DSTYPE = dstype
         cls.CELLDATA = {}
         cls.DATAFRAMES = {}
         
     @classmethod
-    def set_data(cls,table_name,data):
+    def set_data(cls,tablename,data):
         assert cls.DSTYPE == 'data'
-        cls.DATAFRAMES[table_name] = data
+        cls.DATAFRAMES[tablename] = data
     
-    def __init__(self,table_name,ds_name=None,columns=None,index_col=None,optional=False,data=[]):
-        if ds_name is None and self.DSNAME is not None:
-            ds_name = self.DSNAME
-        self.ds_name = ds_name
-        self.table_name = table_name
+    def __init__(self,tablename,dsname=None,columns=None,indexcol=None,optional=False,data=[]):
+        if dsname is None and self.DSNAME is not None:
+            dsname = self.DSNAME
+        self.dsname = dsname
+        self.tablename = tablename
         self.prefix = None
-        self.file_name = None
+        self.filename = None
         self.columns = columns
-        self.index_col = index_col
+        self.indexcol = indexcol
         self.optional = optional
         self.data = pd.DataFrame(data,columns=columns)
         
     def _file_name(self,prefix=None):
         self.prefix = prefix
-        n = self.table_name
+        n = self.tablename
         if prefix:
-            n = prefix + '/' + self.table_name
+            n = prefix + '/' + self.tablename
         return 'data/' + self.ds_name + '.d/' + n + '.csv'
         
     def read(self,file_name=None,optional=None):
@@ -64,27 +70,27 @@ class Table(object):
         if self.DSTYPE == 'dir':
             if not file_name:
                 file_name = self._file_name()
-            self.file_name = file_name
+            self.filename = file_name
             if optional:
                 if not os.path.exists(file_name):
                     return self.data
             stream = file(file_name,'r')
         elif self.DSTYPE == 'cell':
             if optional:
-                if self.table_name not in self.CELLDATA:
+                if self.tablename not in self.CELLDATA:
                     return self.data
-            stream = StringIO.StringIO(self.CELLDATA[self.table_name])
+            stream = StringIO.StringIO(self.CELLDATA[self.tablename])
         elif self.DSTYPE == 'data':
             if optional:
-                if self.table_name not in self.DATAFRAMES:
+                if self.tablename not in self.DATAFRAMES:
                     return self.data
-            self.data = self.DATAFRAMES[self.table_name]
+            self.data = self.DATAFRAMES[self.tablename]
             return self.data
         else:
             raise ValueError("Invalid DS Type: {}".format(self.DSTYPE))
             
         try:
-            self.data = pd.read_csv(stream,usecols=self.columns,index_col=self.index_col)
+            self.data = pd.read_csv(stream,usecols=self.columns,index_col=False,skipinitialspace=True)
         except ValueError as err:
             msg = err.args[0]
             if msg.endswith('is not in list'):
