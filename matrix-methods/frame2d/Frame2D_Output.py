@@ -1,11 +1,11 @@
-## Compiled from Frame2D_Output.py on Sun Jun  5 22:21:56 2016
+## Compiled from Frame2D_Output.ipynb on Fri Jun 10 15:46:42 2016
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
 from salib import extend, import_notebooks
-from Tables import Table
+from Tables import Table, DataSource
 
 ## In [3]:
 from Frame2D_Base import Frame2D
@@ -16,33 +16,33 @@ import Frame2D_Input
 f = Frame2D('frame-1')
 f.input_all()
 
-## In [5]:
+## In [9]:
 @extend
 class Frame2D:
     
-    def write_table(self,table_name,ds_name=None,prefix=None,record=True,precision=None,args=(),makedir=False):
-        t = getattr(self.rawdata,table_name,None)
+    def write_table(self,tablename,dsname=None,prefix=None,record=True,precision=None,args=(),makedir=False):
+        t = getattr(self.rawdata,tablename,None)
         if t is None:
-            methodname = 'list_'+table_name
+            methodname = 'list_'+tablename
             method = getattr(self,methodname,None)
             if method and callable(method):
                 data = method(*args)
-                t = Table(table_name,data=data,columns=getattr(self,'COLUMNS_'+table_name))
+                t = Table(data=data,tablename=tablename,columns=getattr(self,'COLUMNS_'+tablename))
         if t is None:
-            raise ValueError("Unable to find table '{}'".format(table_name))
-        t.write(ds_name=ds_name,prefix=prefix,precision=precision,makedir=makedir)
+            raise ValueError("Unable to find table '{}'".format(tablename))
+        DataSource.write_table(t,dsname=dsname,prefix=prefix,tablename=tablename,precision=precision,makedir=makedir)
         if record:
-            setattr(self.rawdata,table_name,t)
+            setattr(self.rawdata,tablename,t)
         return t            
 
-## In [7]:
+## In [11]:
 @extend
 class Frame2D:
    
    def list_nodes(self):
        return [(n.id,n.x,n.y) for n in self.nodes.values()]
 
-## In [12]:
+## In [18]:
 @extend
 class Frame2D:
     
@@ -56,28 +56,28 @@ class Frame2D:
                 ans.append((node.id,)+cl)
         return ans
 
-## In [18]:
+## In [24]:
 @extend
 class Frame2D:
     
     def list_members(self):
         return [(m.id,m.nodej.id,m.nodek.id) for m in self.members.values()]
 
-## In [21]:
+## In [27]:
 @extend
 class Frame2D:
     
     def list_releases(self):
         return [(m.id,)+tuple(m.releases) for m in self.members.values() if m.releases]
 
-## In [24]:
+## In [30]:
 @extend
 class Frame2D:
     
     def list_properties(self):
         return [(m.id,m.size,m.Ix,m.A) for m in self.members.values()]
 
-## In [27]:
+## In [33]:
 @extend
 class Frame2D:
     
@@ -90,7 +90,7 @@ class Frame2D:
                     ans.append((loadid,node.id,dirns[i],nload[i]))
         return ans
 
-## In [30]:
+## In [36]:
 @extend    
 class Frame2D:
     
@@ -103,7 +103,7 @@ class Frame2D:
                     ans.append((loadid,node.id,dirns[i],nload[i]))
         return ans        
 
-## In [33]:
+## In [39]:
 from MemberLoads import unmakeMemberLoad
 
 @extend
@@ -118,14 +118,14 @@ class Frame2D:
             ans.append(ml)
         return ans
 
-## In [37]:
+## In [43]:
 @extend
 class Frame2D:
     
     def list_load_combinations(self):
         return [(case,load,factor) for case,load,factor in self.loadcombinations]
 
-## In [41]:
+## In [47]:
 @extend
 class Frame2D:
     
@@ -134,29 +134,25 @@ class Frame2D:
     def list_signatures(self):
         return [t.signature() for tn,t in vars(self.rawdata).items() if type(t) is Table]
 
-## In [44]:
+## In [54]:
 import os, os.path
 
 @extend
 class Frame2D:
     
-    def write_all(self,ds_name,mkdir=False):
-        if mkdir:
-            dname = ds_name + '.d'
-            if not os.path.exists(dname):
-                os.mkdir(dname)
-        self.write_table('nodes',ds_name)
-        self.write_table('supports',ds_name)
-        self.write_table('members',ds_name)
-        self.write_table('releases',ds_name)
-        self.write_table('properties',ds_name)
-        self.write_table('node_loads',ds_name)
-        self.write_table('support_displacements',ds_name)
-        self.write_table('member_loads',ds_name)
-        self.write_table('load_combinations',ds_name)
-        self.write_table('signatures',ds_name,record=False)
+    def write_all(self,dsname,makedir=False):
+        self.write_table('nodes',dsname=dsname,makedir=makedir)
+        self.write_table('supports',dsname=dsname)
+        self.write_table('members',dsname=dsname)
+        self.write_table('releases',dsname=dsname)
+        self.write_table('properties',dsname=dsname)
+        self.write_table('node_loads',dsname=dsname)
+        self.write_table('support_displacements',dsname=dsname)
+        self.write_table('member_loads',dsname=dsname)
+        self.write_table('load_combinations',dsname=dsname)
+        self.write_table('signatures',dsname=dsname,record=False)
 
-## In [48]:
+## In [59]:
 @extend
 class Frame2D:
     
@@ -172,7 +168,7 @@ class Frame2D:
             ans.append((node.id,d[0,0],d[1,0],d[2,0]))
         return ans
 
-## In [51]:
+## In [63]:
 @extend
 class Frame2D:
     
@@ -194,7 +190,7 @@ class Frame2D:
                 ans.append(l)
         return ans
 
-## In [54]:
+## In [66]:
 @extend
 class Frame2D:
     
@@ -210,20 +206,17 @@ class Frame2D:
             ans.append((memb.id,efs[0,0],efs[1,0],efs[2,0],efs[3,0],efs[4,0],efs[5,0]))
         return ans
 
-## In [57]:
+## In [69]:
 @extend
 class Frame2D:
     
-    def write_results(self,ds_name,rs):
-        self.write_table('node_displacements',ds_name=ds_name,prefix=rs.loadcase,record=False,
+    def write_results(self,dsname,rs):
+        self.write_table('node_displacements',dsname=dsname,prefix=rs.loadcase,record=False,
                          precision=15,args=(rs,),makedir=True)
-        self.write_table('reaction_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,
+        self.write_table('reaction_forces',dsname=dsname,prefix=rs.loadcase,record=False,
                          precision=15,args=(rs,))
-        self.write_table('member_end_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,
+        self.write_table('member_end_forces',dsname=dsname,prefix=rs.loadcase,record=False,
                          precision=15,args=(rs,))
         if rs.pdelta:
-            self.write_table('pdelta_forces',ds_name=ds_name,prefix=rs.loadcase,record=False,
+            self.write_table('pdelta_forces',dsname=dsname,prefix=rs.loadcase,record=False,
                              precision=15,args=(rs,))
-
-## In [ ]:
-

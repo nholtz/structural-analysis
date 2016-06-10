@@ -1,4 +1,4 @@
-## Compiled from Tables.ipynb on Thu Jun  9 22:30:14 2016
+## Compiled from Tables.ipynb on Fri Jun 10 16:02:43 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -64,7 +64,7 @@ class DataSource(object):
         self.tables = cls.TABLES
         cls.DATASOURCE = self
 
-## In [26]:
+## In [16]:
 @extend
 class DataSource:
     
@@ -78,14 +78,15 @@ class DataSource:
     @classmethod
     def set_source(cls,dsname,dstype=None):
         self = cls.DATASOURCE
-        if dstype is None:
-            dirname = self.root + '/' + dsname + '.d'
-            if os.path.exists(dirname):
-                dstype = 'dir'
-            else:
-                dstype = 'unknown'
-        if dstype not in ['dir','cell','data']:
-            raise ValueError,"dstype '{}' is invalid.".format(dstype)
+        if dsname is not None:
+            if dstype is None:
+                dirname = self.root + '/' + dsname + '.d'
+                if os.path.exists(dirname):
+                    dstype = 'dir'
+                else:
+                    dstype = 'unknown'
+            if dstype not in ['dir','cell','data']:
+                raise ValueError,"dstype '{}' is invalid.".format(dstype)
         self.dsname = dsname
         self.dstype = dstype
         self.celldata = {}
@@ -111,7 +112,7 @@ class DataSource:
             n = prefix + '/' + tablename
         return self.root + '/' + self.dsname + '.d/' + n + '.csv'
 
-## In [45]:
+## In [26]:
 @extend
 class DataSource:
     
@@ -127,9 +128,10 @@ class DataSource:
             if tablename in self.celldata:
                 stream = StringIO.StringIO(self.celldata[tablename])
             else:
-                filename = self._file_name(tablename,prefix=prefix)
-                if os.path.exists(filename):
-                    stream = file(filename,'r')
+                if self.dsname is not None:
+                    filename = self._file_name(tablename,prefix=prefix)
+                    if os.path.exists(filename):
+                        stream = file(filename,'r')
             if stream is None:
                 if optional:
                     d = pd.DataFrame(columns=columns)
@@ -153,7 +155,7 @@ class DataSource:
             t = t[columns]
         return t
 
-## In [62]:
+## In [37]:
 @register_cell_magic('Table')
 def cell_table(line,celltext):
     mo = re.match(r'\s*(\S+)\s*$',line)
@@ -163,45 +165,57 @@ def cell_table(line,celltext):
     global DataSource
     DataSource.set_celldata(tablename,celltext)
 
-## In [ ]:
+## In [53]:
 @extend
 class DataSource:
     
-    def write(self,ds_name=None,precision=None,index=False,prefix=None,makedir=False):
-        if ds_name is None:
-            ds_name = self.ds_name
-        dirname = 'data/' + ds_name + '.d'
+    @classmethod
+    def write_table(cls,table,root=None,dsname=None,tablename=None,prefix=None,precision=None,index=False,makedir=False):
+        self = cls.DATASOURCE
+        if root is None:
+            root = self.root
+        if dsname is None:
+            dsname = self.dsname
+        if tablename is None:
+            tablename = table.tablename
+        dirname = root + '/' + dsname + '.d'
         if makedir and not os.path.exists(dirname):
             os.mkdir(dirname)
         if prefix is not None:
             dirname = dirname + '/' + prefix
             if makedir and not os.path.exists(dirname):
                 os.mkdir(dirname)
-        self.file_name = file_name = dirname + '/' + self.table_name + '.csv'
+                
+        table.tablename = tablename
+        table.dsname = dsname
+        table.filename = filename = dirname + '/' + tablename + '.csv'
+        
         float_format = None
         if precision is not None:
             float_format = '%.{:d}g'.format(precision)
-        self.data.to_csv(file_name,index=index,float_format=float_format)
-        return file_name
-        
-    def basename(self,file_name=None):
-        if file_name is None:
-            file_name = self.file_name
-        return os.path.basename(file_name)
+        table.to_csv(filename,index=index,float_format=float_format)
+        return filename
+
+## In [43]:
+@extend
+class Table:
     
     def signature(self):
-        file_name = self.file_name
-        return (self.table_name,file_name,signature(file_name))
+        filename = self.filename
+        if os.path.exists(filename):
+            return (self.tablename,self.filename,signature(filename))
+        raise ValueError,"Table {}: filename: {} - does not exist.".format(self.tablename,self.filename)
     
-def signature(file_name):
-    f = open(file_name,mode='rb')
+def signature(filename):
+    f = open(filename,mode='rb')
     m = hashlib.sha256(f.read())
     f.close()
     return m.hexdigest()
 
-## In [70]:
+## In [44]:
 DataSource.DATASOURCE = None
 __ds__ = DataSource()
 
-## In [ ]:
-
+## In [70]:
+DataSource.DATASOURCE = None
+__ds__ = DataSource()
