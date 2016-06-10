@@ -1,14 +1,14 @@
-## Compiled from Frame2D_Base.py on Sun Jun  5 22:08:35 2016
+## Compiled from Frame2D_Base.ipynb on Thu Jun  9 22:48:06 2016
 
-## In [2]:
+## In [1]:
 from __future__ import print_function
 
-## In [3]:
+## In [2]:
 from collections import OrderedDict, defaultdict
 from LoadSets import LoadSet, LoadCombination
-from Tables import Table
+from Tables import DataSource
 
-## In [4]:
+## In [3]:
 class Object(object):
     pass
 
@@ -17,7 +17,7 @@ class Frame2D(object):
     def __init__(self,dsname=None):
         self.dsname = dsname
         if dsname is not None:
-            Table.set_source(dsname)
+            DataSource.set_source(dsname)
         self.reset()
         
     def reset(self):
@@ -37,7 +37,7 @@ class Frame2D(object):
         self.D = None
         self.PDF = None    # P-Delta forces
 
-## In [1]:
+## In [4]:
 class ResultSet(object):
     
     """Instances of class ResultSet gather together all of the results from
