@@ -1,4 +1,4 @@
-## Compiled from Nodes.py on Sun May 22 17:01:09 2016
+## Compiled from Nodes.ipynb on Sat Jun 11 11:09:20 2016
 
 ## In [2]:
 import salib as sl

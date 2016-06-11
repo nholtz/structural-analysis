@@ -1,4 +1,4 @@
-## Compiled from Members.py on Fri May 27 16:26:40 2016
+## Compiled from Members.ipynb on Sat Jun 11 11:09:20 2016
 
 ## In [1]:
 import salib as sl

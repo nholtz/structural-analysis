@@ -1,4 +1,4 @@
-## Compiled from Frame2D_Output.ipynb on Fri Jun 10 15:46:42 2016
+## Compiled from Frame2D_Output.ipynb on Sat Jun 11 11:09:20 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -11,12 +11,7 @@ from Tables import Table, DataSource
 from Frame2D_Base import Frame2D
 import Frame2D_Input
 
-## In [4]:
-#test:
-f = Frame2D('frame-1')
-f.input_all()
-
-## In [9]:
+## In [5]:
 @extend
 class Frame2D:
     
@@ -35,14 +30,14 @@ class Frame2D:
             setattr(self.rawdata,tablename,t)
         return t            
 
-## In [11]:
+## In [7]:
 @extend
 class Frame2D:
    
    def list_nodes(self):
        return [(n.id,n.x,n.y) for n in self.nodes.values()]
 
-## In [18]:
+## In [12]:
 @extend
 class Frame2D:
     
@@ -56,28 +51,28 @@ class Frame2D:
                 ans.append((node.id,)+cl)
         return ans
 
-## In [24]:
+## In [18]:
 @extend
 class Frame2D:
     
     def list_members(self):
         return [(m.id,m.nodej.id,m.nodek.id) for m in self.members.values()]
 
-## In [27]:
+## In [21]:
 @extend
 class Frame2D:
     
     def list_releases(self):
         return [(m.id,)+tuple(m.releases) for m in self.members.values() if m.releases]
 
-## In [30]:
+## In [24]:
 @extend
 class Frame2D:
     
     def list_properties(self):
         return [(m.id,m.size,m.Ix,m.A) for m in self.members.values()]
 
-## In [33]:
+## In [27]:
 @extend
 class Frame2D:
     
@@ -90,7 +85,7 @@ class Frame2D:
                     ans.append((loadid,node.id,dirns[i],nload[i]))
         return ans
 
-## In [36]:
+## In [30]:
 @extend    
 class Frame2D:
     
@@ -103,7 +98,7 @@ class Frame2D:
                     ans.append((loadid,node.id,dirns[i],nload[i]))
         return ans        
 
-## In [39]:
+## In [33]:
 from MemberLoads import unmakeMemberLoad
 
 @extend
@@ -118,14 +113,14 @@ class Frame2D:
             ans.append(ml)
         return ans
 
-## In [43]:
+## In [37]:
 @extend
 class Frame2D:
     
     def list_load_combinations(self):
         return [(case,load,factor) for case,load,factor in self.loadcombinations]
 
-## In [47]:
+## In [41]:
 @extend
 class Frame2D:
     
@@ -134,7 +129,7 @@ class Frame2D:
     def list_signatures(self):
         return [t.signature() for tn,t in vars(self.rawdata).items() if type(t) is Table]
 
-## In [54]:
+## In [44]:
 import os, os.path
 
 @extend
@@ -152,7 +147,7 @@ class Frame2D:
         self.write_table('load_combinations',dsname=dsname)
         self.write_table('signatures',dsname=dsname,record=False)
 
-## In [59]:
+## In [48]:
 @extend
 class Frame2D:
     
@@ -168,7 +163,7 @@ class Frame2D:
             ans.append((node.id,d[0,0],d[1,0],d[2,0]))
         return ans
 
-## In [63]:
+## In [51]:
 @extend
 class Frame2D:
     
@@ -190,7 +185,7 @@ class Frame2D:
                 ans.append(l)
         return ans
 
-## In [66]:
+## In [54]:
 @extend
 class Frame2D:
     
@@ -206,7 +201,7 @@ class Frame2D:
             ans.append((memb.id,efs[0,0],efs[1,0],efs[2,0],efs[3,0],efs[4,0],efs[5,0]))
         return ans
 
-## In [69]:
+## In [57]:
 @extend
 class Frame2D:
     

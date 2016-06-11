@@ -1,4 +1,4 @@
-## Compiled from NodeLoads.py on Thu May 26 23:49:12 2016
+## Compiled from NodeLoads.ipynb on Sat Jun 11 11:09:20 2016
 
 ## In [1]:
 import numpy as np
