@@ -1,4 +1,4 @@
-## Compiled from Tables.ipynb on Sat Jun 11 11:09:19 2016
+## Compiled from Tables.ipynb on Sun Jun 12 23:13:17 2016
 
 ## In [1]:
 from __future__ import print_function
@@ -122,40 +122,43 @@ class DataSource:
         stream = None
         filename = None
         t = None
+        
+        def _chk(t,columns=columns):
+            if columns is None:
+                return t
+            prov = set(t.columns)
+            reqd = set(columns)
+            if reqd-prov:
+                raise ValueError("Columns missing for table '{}': {}. Required columns are: {}"
+                                 .format(tablename,list(reqd-prov),columns))
+            if prov-reqd:
+                if not extrasok:
+                    raise ValueError("Extra columns for table '{}': {}. Required columns are: '{}'"
+                                    .format(tablename,list(prov-reqd),columns))
+                t = t[columns]
+            return t            
+            
         if tablename in self.tables:
-            t = self.tables[tablename]
+            return _chk(self.tables[tablename])
+
+        if tablename in self.celldata:
+            stream = StringIO.StringIO(self.celldata[tablename])
         else:
-            if tablename in self.celldata:
-                stream = StringIO.StringIO(self.celldata[tablename])
+            if self.dsname is not None:
+                filename = self._file_name(tablename,prefix=prefix)
+                if os.path.exists(filename):
+                    stream = file(filename,'r')
+        if stream is None:
+            if optional:
+                d = pd.DataFrame(columns=columns)
             else:
-                if self.dsname is not None:
-                    filename = self._file_name(tablename,prefix=prefix)
-                    if os.path.exists(filename):
-                        stream = file(filename,'r')
-            if stream is None:
-                if optional:
-                    d = pd.DataFrame(columns=columns)
-                else:
-                    raise ValueError("Table '{}' does not exist.".format(tablename))
-            else:
-                d = pd.read_csv(stream,index_col=None,skipinitialspace=True)
-            t = Table(d,dsname=self.dsname,tablename=tablename,filename=filename)
+                raise ValueError("Table '{}' does not exist.".format(tablename))
+        else:
+            d = pd.read_csv(stream,index_col=None,skipinitialspace=True)
+        t = Table(d,dsname=self.dsname,tablename=tablename,filename=filename)
+        return _chk(t)
 
-        if columns is None:
-            return t
-        prov = set(t.columns)
-        reqd = set(columns)
-        if reqd-prov:
-            raise ValueError("Columns missing for table '{}': {}. Required columns are: {}"
-                             .format(tablename,list(reqd-prov),columns))
-        if prov-reqd:
-            if not extrasok:
-                raise ValueError("Extra columns for table '{}': {}. Required columns are: '{}'"
-                                .format(tablename,list(prov-reqd),columns))
-            t = t[columns]
-        return t
-
-## In [37]:
+## In [38]:
 @register_cell_magic('Table')
 def cell_table(line,celltext):
     mo = re.match(r'\s*(\S+)\s*$',line)
@@ -165,7 +168,7 @@ def cell_table(line,celltext):
     global DataSource
     DataSource.set_celldata(tablename,celltext)
 
-## In [53]:
+## In [43]:
 @extend
 class DataSource:
     
@@ -196,7 +199,7 @@ class DataSource:
         table.to_csv(filename,index=index,float_format=float_format)
         return filename
 
-## In [43]:
+## In [44]:
 @extend
 class Table:
     
@@ -212,10 +215,10 @@ def signature(filename):
     f.close()
     return m.hexdigest()
 
-## In [44]:
+## In [45]:
 DataSource.DATASOURCE = None
 __ds__ = DataSource()
 
-## In [70]:
+## In [56]:
 DataSource.DATASOURCE = None
 __ds__ = DataSource()
