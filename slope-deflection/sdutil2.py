@@ -40,6 +40,10 @@ class EF(object):
         """Implement the scalar multiplcation operation."""
         return EF(self.L,self.m0*f,self.m1*f,self.v0*f,self.v1*f)
     
+    def __rmul__(self,f):
+        """Implement the left scalar multiplcation operation."""
+        return EF(self.L,self.m0*f,self.m1*f,self.v0*f,self.v1*f)
+    
     def __getitem__(self,ix):
         """Return end forces accessed by subscript 0 to 3."""
         return self.efs[ix]
