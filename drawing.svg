@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   viewBox="0 0 435.95238 116.8968"
+   version="1.1"
+   id="svg2"
+   height="1.217675in"
+   width="4.5411706in">
+  <script
+     id="script3033"
+     xlink:href="" />
+  <defs
+     id="defs4">
+    <marker
+       refY="3"
+       refX="7"
+       viewBox="0 0 10 6"
+       orient="auto"
+       markerHeight="6"
+       markerWidth="10"
+       markerUnits="userSpaceOnUse"
+       id="CLArrowEnd">
+      <path
+         id="path3451"
+         d="M 0,0 10,3 0,6 2,3 Z" />
+    </marker>
+    <marker
+       refY="3"
+       refX="7"
+       viewBox="0 0 10 6"
+       orient="auto"
+       markerHeight="6"
+       markerWidth="10"
+       markerUnits="userSpaceOnUse"
+       id="marker4507">
+      <path
+         id="path4509"
+         d="M 0,0 10,3 0,6 2,3 Z" />
+    </marker>
+    <marker
+       refY="3"
+       refX="7"
+       viewBox="0 0 10 6"
+       orient="auto"
+       markerHeight="6"
+       markerWidth="10"
+       markerUnits="userSpaceOnUse"
+       id="marker4511">
+      <path
+         id="path4513"
+         d="M 0,0 10,3 0,6 2,3 Z" />
+    </marker>
+    <marker
+       refY="3"
+       refX="7"
+       viewBox="0 0 10 6"
+       orient="auto"
+       markerHeight="6"
+       markerWidth="10"
+       markerUnits="userSpaceOnUse"
+       id="marker4515">
+      <path
+         id="path4517"
+         d="M 0,0 10,3 0,6 2,3 Z" />
+    </marker>
+    <!-- markers by NMH <nholtz@cee.carleton.ca> -->
+    <marker
+       style="overflow:visible"
+       id="DimensionTick"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <path
+         id="path6"
+         transform="translate(-4,-4)"
+         style="stroke:#4d4d4d;stroke-width:1px;marker-start:none"
+         d="M 0,0 8,8" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       markerUnits="userSpaceOnUse"
+       id="TrussNodeS"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <circle
+         id="circle9"
+         style="fill:#ffffff;stroke:#000000;stroke-width:1"
+         r="3"
+         cy="0"
+         cx="0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       markerUnits="userSpaceOnUse"
+       id="TrussNodeM"
+       refX="0"
+       refY="0"
+       orient="auto">
+      <circle
+         id="circle12"
+         style="fill:#ffffff;stroke:#000000;stroke-width:1"
+         r="4"
+         cy="0"
+         cx="0" />
+    </marker>
+    <!-- patternss by NMH <nholtz@cee.carleton.ca> -->
+    <pattern
+       patternUnits="userSpaceOnUse"
+       height="18"
+       width="18"
+       y="0"
+       x="0"
+       id="black-stripes-on-red">
+      <path
+         style="fill:#ff0000;stroke:none"
+         d="M 0,0 18,0 18,18 0,18 z"
+         id="path3006" />
+      <path
+         style="fill:#000000;stroke:none"
+         d="M 0,9 9,0 11,0 0,11 z"
+         id="path3008" />
+      <path
+         style="fill:#000000;stroke:none"
+         d="m 9,18 9,-9 0,2 -7,7 z"
+         id="path5234" />
+    </pattern>
+    <symbol
+       id="use3511">
+      <g
+         transform="matrix(1.3333333,0,0,1.3333333,191.47495,293.01094)"
+         id="use3511_transform">
+        <title
+           id="title3743">Fixed Support</title>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1"
+           id="path3409"
+           d="M 0,-6 0,6" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1"
+           id="path3411"
+           d="m 0,-6 -3,3 m 3,0 -3,3 m 3,0 -3,3 m 3,0 -3,3 m 3,0 -3,3" />
+      </g>
+    </symbol>
+    <symbol
+       id="g3395">
+      <g
+         transform="matrix(1.0666667,0,0,1.0666667,148.63008,-79.153392)"
+         id="g3395_transform">
+        <title
+           id="title3739">Roller Support</title>
+        <path
+           style="fill:#000000;stroke:#000000;stroke-width:0"
+           id="path5224-5"
+           d="m 132.30977,337.64131 5,7.5 -10,0 z" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:square"
+           id="path5226-4"
+           d="m 124.80977,352.22885 15,0" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1.25"
+           id="path5228-7"
+           d="m 139.80977,352.22885 -3.75,3.75 m 0,-3.75 -3.75,3.75 m 0,-3.75 -3.75,3.75 m 0,-3.75 -3.75,3.75 m 0,-3.75 -3.75,3.75" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 123.97004,345.62043 16.4794,0"
+           id="path3342" />
+        <g
+           id="use3513-4"
+           transform="matrix(0.93789014,0,0,0.93789014,136.50605,348.88774)">
+          <circle
+             cx="0"
+             cy="0"
+             r="2.5"
+             id="circle3573-4"
+             style="fill:#ffffff;stroke:#000000;stroke-width:1" />
+        </g>
+        <g
+           id="use3513-4-7"
+           transform="matrix(0.93789014,0,0,0.93789014,128.23072,348.94766)">
+          <circle
+             cx="0"
+             cy="0"
+             r="2.5"
+             id="circle3573-4-8"
+             style="fill:#ffffff;stroke:#000000;stroke-width:1" />
+        </g>
+      </g>
+    </symbol>
+    <symbol
+       id="use3513">
+      <g
+         transform="matrix(1.3333333,0,0,1.3333333,239.0453,325.30186)"
+         id="use3513_transform">
+        <title
+           id="title14103">Internal Pin</title>
+        <circle
+           style="fill:#ffffff;stroke:#000000;stroke-width:1"
+           id="circle3573"
+           r="2.5"
+           cy="0"
+           cx="0" />
+      </g>
+    </symbol>
+    <symbol
+       id="g12428">
+      <g
+         id="g12428_transform"
+         transform="matrix(1,0,0,-1,59.458741,261.59744)">
+        <title
+           id="title12474">Force Down</title>
+        <path
+           id="path12430"
+           d="m 268.80001,174.00001 -3.98178,10.34678 3.99903,-1.12017 4.00922,1.12017 z"
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.53600013;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <path
+           id="path12432"
+           d="m 268.80001,222.00001 0,-39.58812"
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.53600013;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+    </symbol>
+    <symbol
+       id="g12422">
+      <g
+         transform="matrix(-1,0,0,-1,559.50302,321.20838)"
+         id="g12422_transform">
+        <title
+           id="title12466">Moment CW Down</title>
+        <path
+           id="path12424"
+           d="m 335.92871,188.98086 -3.98178,10.34678 3.99903,-1.12017 4.00922,1.12017 z"
+           style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.53600013;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <path
+           style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.53600013;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="path12426"
+           d="m 384,198.00002 a 24,24 0 0 1 -12.24581,20.9246 24,24 0 0 1 -24.24078,-0.42863 24,24 0 0 1 -11.49841,-21.34445" />
+      </g>
+    </symbol>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-nc/3.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-nc/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:prohibits
+           rdf:resource="http://creativecommons.org/ns#CommercialUse" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-118.80132,-104.25479)"
+     id="layer1">
+    <path
+       id="path3363"
+       d="m 144,174.00001 364.80002,0"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.53600013;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       transform="matrix(1.0666667,0,0,1.0666667,-61.469135,-139.6369)"
+       xlink:href="#use3511"
+       id="use7975" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       transform="matrix(1.0666667,0,0,1.0666667,-21.07142,-125.20246)"
+       xlink:href="#g3395"
+       id="use8014" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       transform="matrix(1.0666667,0,0,1.0666667,123.45663,-125.20246)"
+       xlink:href="#g3395"
+       id="use8063" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       transform="matrix(1.0666667,0,0,1.0666667,101.22164,-173.04146)"
+       xlink:href="#use3513"
+       id="use8094" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       transform="matrix(1.0666667,0,0,1.0666667,-125.09545,82.048393)"
+       xlink:href="#g12428"
+       id="use8123" />
+    <use
+       height="100%"
+       width="100%"
+       y="0"
+       x="0"
+       transform="matrix(0,1.0666667,-1.0666667,0,640.55728,-40.774916)"
+       xlink:href="#g12422"
+       id="use8169" />
+  </g>
+</svg>
