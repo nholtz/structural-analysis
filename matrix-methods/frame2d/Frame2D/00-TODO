@@ -1,0 +1,7 @@
+Tue Feb 28 15:51:49 EST 2017
+
+ - add a spreadsheet as a datasource
+ - each worksheet corresponds to a table (or CSV file)
+ - can have worksheet to contain notes, drawings.
+ - setup an empty template for ease of creation.
+    - worksheet to document
