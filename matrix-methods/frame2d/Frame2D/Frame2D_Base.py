@@ -1,12 +1,12 @@
-## Compiled from Frame2D_Base.ipynb on Sat Jun 11 11:09:19 2016
+## Compiled from Frame2D/Frame2D_Base.ipynb on Fri Sep 22 15:42:25 2017
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
 from collections import OrderedDict, defaultdict
-from LoadSets import LoadSet, LoadCombination
-from Tables import DataSource
+from .LoadSets import LoadSet, LoadCombination
+from .Tables import DataSource
 
 ## In [3]:
 class Object(object):

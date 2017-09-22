@@ -83,7 +83,7 @@ class FEF(object):
         edge of load to right end of span."""
         
         if a is not None and b is not None and c is not None and L != (a+b+c):
-            raise ValueError, 'Cannot specify all of a, b & c'
+            raise ValueError('Cannot specify all of a, b & c')
         if a is None:
             if b is not None and c is not None:
                 a = L - (b+c)
