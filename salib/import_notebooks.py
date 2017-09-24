@@ -1,2 +1,2 @@
-import NBImporter
+from . import NBImporter
 NBImporter.import_notebooks()

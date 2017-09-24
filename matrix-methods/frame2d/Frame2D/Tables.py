@@ -1,4 +1,4 @@
-## Compiled from Tables.ipynb on Sun Jun 12 23:13:17 2016
+## Compiled from Frame2D/Tables.ipynb on Fri Sep 22 15:42:26 2017
 
 ## In [1]:
 from __future__ import print_function
@@ -6,7 +6,10 @@ from __future__ import print_function
 from salib import extend
 import pandas as pd
 import os, os.path
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import hashlib
 from IPython.core.magic import register_cell_magic
 import re
@@ -72,7 +75,7 @@ class DataSource:
     def set_root(cls,newroot):
         self = cls.DATASOURCE
         if not os.path.exists(newroot):
-            raise ValueError,"Root '{}' does not exist.".format(newroot)
+            raise ValueError("Root '{}' does not exist.".format(newroot))
         self.root = newroot
 
     @classmethod
@@ -86,7 +89,7 @@ class DataSource:
                 else:
                     dstype = 'unknown'
             if dstype not in ['dir','cell','data']:
-                raise ValueError,"dstype '{}' is invalid.".format(dstype)
+                raise ValueError("dstype '{}' is invalid.".format(dstype))
         self.dsname = dsname
         self.dstype = dstype
         self.celldata = {}
@@ -142,7 +145,7 @@ class DataSource:
             return _chk(self.tables[tablename])
 
         if tablename in self.celldata:
-            stream = StringIO.StringIO(self.celldata[tablename])
+            stream = StringIO(self.celldata[tablename])
         else:
             if self.dsname is not None:
                 filename = self._file_name(tablename,prefix=prefix)
@@ -207,7 +210,7 @@ class Table:
         filename = self.filename
         if os.path.exists(filename):
             return (self.tablename,self.filename,signature(filename))
-        raise ValueError,"Table {}: filename: {} - does not exist.".format(self.tablename,self.filename)
+        raise ValueError("Table {}: filename: {} - does not exist.".format(self.tablename,self.filename))
     
 def signature(filename):
     f = open(filename,mode='rb')

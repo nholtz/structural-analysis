@@ -1,21 +1,21 @@
-## Compiled from Frame2D/Frame2D_Input.ipynb on Sun Jun 12 09:41:05 2016
+## Compiled from Frame2D/Frame2D_Input.ipynb on Fri Sep 22 15:44:22 2017
 
 ## In [1]:
 from __future__ import print_function
 
-## In [2]:
+## In [1]:
 from salib import extend, import_notebooks
-from Tables import Table, DataSource
-from Nodes import Node
-from Members import Member
-from LoadSets import LoadSet, LoadCombination
-from NodeLoads import makeNodeLoad
-from MemberLoads import makeMemberLoad
+from .Tables import Table, DataSource
+from .Nodes import Node
+from .Members import Member
+from .LoadSets import LoadSet, LoadCombination
+from .NodeLoads import makeNodeLoad
+from .MemberLoads import makeMemberLoad
 from collections import OrderedDict, defaultdict
 import numpy as np
 
 ## In [3]:
-from Frame2D_Base import Frame2D
+from .Frame2D_Base import Frame2D
 
 ## In [4]:
 @extend

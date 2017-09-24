@@ -1,15 +1,15 @@
-## Compiled from Frame2D_Output.ipynb on Sat Jun 11 11:09:20 2016
+## Compiled from Frame2D/Frame2D_Output.ipynb on Fri Sep 22 15:44:25 2017
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
 from salib import extend, import_notebooks
-from Tables import Table, DataSource
+from .Tables import Table, DataSource
 
 ## In [3]:
-from Frame2D_Base import Frame2D
-import Frame2D_Input
+from .Frame2D_Base import Frame2D
+from . import Frame2D_Input
 
 ## In [5]:
 @extend

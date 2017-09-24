@@ -1,9 +1,9 @@
-## Compiled from Members.ipynb on Sat Jun 11 11:09:20 2016
+## Compiled from Frame2D/Members.ipynb on Fri Sep 22 15:44:23 2017
 
 ## In [1]:
 import salib as sl
 import numpy as np
-from MemberLoads import EF
+from .MemberLoads import EF
 
 ## In [2]:
 class Member(object):
