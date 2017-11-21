@@ -62,48 +62,44 @@ def showImage(basename,rescan=False):
     else:
         raise Exception("Unable to find image '{0}'; Tried these extensions: {1}".format(basename,EXTS))
 
-#from NBImporter import import_notebooks
 
-def extend_old(old):
-    """This is used as a class decorator to 'extend' class definitions,
-    for example, over widely dispersed areas.  EG:
+def extend(newcls):
+    
+    """A class decorator to 'extend' class definitions
+    EG:
 
-        class Foo(object):
+        class Foo:
+            def __init__(...):
+                . . .
+            def meth1(...):
+                . . .
             . . .
-        @extend(Foo)
+        . . .
+        @extend
         class Foo:
             def meth2(...):
             . . .
 
-    will result in one class Foo containing all methods, etc."""
+    will result in one class Foo (the original one) containing all methods, 
+    eg, meth1, meth2, etc. All methods with names beginning and
+    ending with '__' must be defined in the original, unextended, definition."""
 
-    def _extend(new,old=old):
-        if old is None:
-            old = getattr(sys.modules[new.__module__],new.__name__,None)
-            if old is None:
-                raise TypeError("Cannot find previous version of class: {}".format(new.__name__))
-        if new.__name__ != old.__name__:
-            raise TypeError("Class names must match: '{}' != '{}'".format(new.__name__,old.__name__))
-        if type(new) is not types.ClassType:
-            raise TypeError("Extension class must be an old-style class (i.e. not derived from class object)")
-        if len(new.__bases__) != 0:
-            raise TypeError("Extension class must not have any base classes.")
-        ng = ['__doc__','__module__']
-        for a,v in inspect.getmembers(new):
-            if a not in ng:
-                if type(v) is types.MethodType:
-                    if v.im_self is None:
-                        v =  types.MethodType(v.im_func,None,old)
-                    else:
-                        v = classmethod(v.im_func)
-                elif type(v) is property:
-                    v = property(v.fget,v.fset,v.fdel)
-                elif type(v) is types.FunctionType:
-                    v = staticmethod(types.FunctionType(v.func_code,v.func_globals,v.func_name,v.func_defaults,v.func_closure))
-                setattr(old,a,v)
-                #print('Set {} in class {} to type {}'.format(a,old.__name__,type(v)))
-        return old
-    
-    return _extend
+    clsname = newcls.__name__
+    oldcls = getattr(sys.modules[newcls.__module__],clsname,None)
+    if oldcls is None:
+        raise TypeError("Class '{}' not previously defined; therefore cannot be extended."
+                        .format(clsname))
 
-extend = extend_old(None)
+    if len(newcls.__bases__) > 1 or (len(newcls.__bases__) == 1 and newcls.__bases__[0] is not object):
+        raise TypeError("Class '{}' extension cannot have any base classes."
+                        .format(clsname))
+
+    for a,v in newcls.__dict__.items():
+        if not a.startswith('__') or not a.endswith('__'):
+            ## print(a,v,type(v))
+            if hasattr(oldcls,a):
+                raise TypeError("Attribute '{}' in extended class '{}' already exists. Cannot be redefined."
+                               .format(a,clsname))
+            setattr(oldcls,a,v)
+            
+    return oldcls

@@ -61,10 +61,10 @@ class NotebookImporter(object):
         
         nb_path = self._find_notebook(fullname, path)
         if not nb_path:
-            ##print('Notebook not found.')
+            print('Notebook not found.')
             return None
         
-        ##print('Found:', nb_path)
+        print('Found:', nb_path)
         if nb_path.endswith('.ipynb'):
             py_path = nb_path[:-6] + '.py'
         else:
@@ -82,7 +82,7 @@ class NotebookImporter(object):
         and tries turning "Foo_Bar" into "Foo-Bar" and "Foo Bar" 
         if Foo_Bar does not exist.
         """
-        ##print('find_notebook args:',fullname,path)
+        print('find_notebook args:',fullname,path)
         parts = fullname.split('.')
         name1 = parts[-1] + '.ipynb'
         mpaths = [name1]
@@ -95,7 +95,7 @@ class NotebookImporter(object):
         for d in path:
             for p in mpaths:
                 nb_path = os.path.join(d,p)
-                ##print('find_notebook trying:',nb_path)
+                print('find_notebook trying:',nb_path)
                 if os.path.isfile(nb_path):
                     return nb_path
                 
