@@ -1,4 +1,4 @@
-## Compiled from Frame2D/MemberLoads.ipynb on Fri Sep 22 15:44:24 2017
+## Compiled from MemberLoads.ipynb on Tue Nov 21 20:29:44 2017
 
 ## In [1]:
 from __future__ import division, print_function

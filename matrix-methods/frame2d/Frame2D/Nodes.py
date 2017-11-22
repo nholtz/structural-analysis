@@ -1,4 +1,4 @@
-## Compiled from Frame2D/Nodes.ipynb on Fri Sep 22 15:44:22 2017
+## Compiled from Nodes.ipynb on Tue Nov 21 20:29:46 2017
 
 ## In [1]:
 import math

@@ -1,4 +1,4 @@
-#from salib import extend, import_notebooks
+from salib import extend
 
 #from .Frame2D_Base import Frame2D, ResultSet
 

@@ -35,6 +35,8 @@
 
 from __future__ import print_function
 
+raise ImportError('NBImporter not working in Python 3.4+')
+
 import sys
 import os, os.path
 from IPython import get_ipython

@@ -1,4 +1,4 @@
-## Compiled from Frame2D/Members.ipynb on Fri Sep 22 15:44:23 2017
+## Compiled from Members.ipynb on Tue Nov 21 20:29:45 2017
 
 ## In [1]:
 import salib as sl
