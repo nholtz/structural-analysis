@@ -95,9 +95,9 @@ def extend(newcls):
                         .format(clsname))
 
     for a,v in newcls.__dict__.items():
-        if not a.startswith('__') or not a.endswith('__'):
+        if not a.startswith('__'):
             ## print(a,v,type(v))
-            if hasattr(oldcls,a):
+            if False and hasattr(oldcls,a):
                 raise TypeError("Attribute '{}' in extended class '{}' already exists. Cannot be redefined."
                                .format(a,clsname))
             setattr(oldcls,a,v)

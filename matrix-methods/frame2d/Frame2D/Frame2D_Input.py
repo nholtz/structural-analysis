@@ -1,10 +1,10 @@
-## Compiled from Frame2D_Input.ipynb on Tue Nov 21 20:29:43 2017
+## Compiled from /files/home/nholtz/work/git/structural-analysis/matrix-methods/frame2d/Frame2D/Frame2D_Input.ipynb on Wed Dec  6 23:31:07 2017
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [1]:
-from salib import extend, import_notebooks
+from salib import extend, NBImporter
 from .Tables import Table, DataSource
 from .Nodes import Node
 from .Members import Member

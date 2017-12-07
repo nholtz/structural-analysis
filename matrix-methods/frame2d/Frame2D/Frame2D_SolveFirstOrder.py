@@ -1,10 +1,10 @@
-## Compiled from Frame2D_SolveFirstOrder.ipynb on Tue Nov 21 20:29:44 2017
+## Compiled from /files/home/nholtz/work/git/structural-analysis/matrix-methods/frame2d/Frame2D/Frame2D_SolveFirstOrder.ipynb on Wed Dec  6 23:35:21 2017
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
-from salib import extend, import_notebooks
+from salib import extend, NBImporter
 import numpy as np
 from collections import defaultdict
 

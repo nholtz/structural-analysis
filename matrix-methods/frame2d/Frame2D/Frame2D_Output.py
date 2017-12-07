@@ -1,10 +1,10 @@
-## Compiled from Frame2D_Output.ipynb on Tue Nov 21 20:29:44 2017
+## Compiled from /files/home/nholtz/work/git/structural-analysis/matrix-methods/frame2d/Frame2D/Frame2D_Output.ipynb on Wed Dec  6 23:35:19 2017
 
 ## In [1]:
 from __future__ import print_function
 
 ## In [2]:
-from salib import extend, import_notebooks
+from salib import extend, NBImporter
 from .Tables import Table, DataSource
 
 ## In [3]:
@@ -99,7 +99,7 @@ class Frame2D:
         return ans        
 
 ## In [33]:
-from MemberLoads import unmakeMemberLoad
+from .MemberLoads import unmakeMemberLoad
 
 @extend
 class Frame2D:

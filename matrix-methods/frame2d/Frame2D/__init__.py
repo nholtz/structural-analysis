@@ -1,8 +1,10 @@
-from salib import extend
+from salib import extend, NBImporter
 
-#from .Frame2D_Base import Frame2D, ResultSet
+Frame2D = True,False
 
-#from . import Frame2D_Input
-#from . import Frame2D_Output
-#from . import Frame2D_Display
-#from . import Frame2D_SolveFirstOrder
+from .Frame2D_Base import Frame2D, ResultSet
+
+from . import Frame2D_Input
+from . import Frame2D_Output
+from . import Frame2D_Display
+from . import Frame2D_SolveFirstOrder
