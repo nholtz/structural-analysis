@@ -1,6 +1,3 @@
-# empty file so salib can be a module
-
-from __future__ import print_function
 import sys
 import inspect
 import types
