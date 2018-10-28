@@ -3,4 +3,4 @@
 # #
 
 d=`/bin/pwd`
-PYTHONPATH=$d:$d/../ca-steel-design/lib:$PYTHONPATH jupyter notebook $*
+PYTHONPATH=$d:$d/../ca-steel-design/lib:$PYTHONPATH jupyter lab $*
