@@ -13155,10 +13155,17 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="numbering-and-signs.svg" alt="a figure"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>The above figure shows the numbering and sign convention used for the six end displacements and forces for a general 2D frame member.  These are shown relative to the local coordinate system of the member, with origin at the left, or <em>j-end</em>, and <em>x</em>-axis coincident with the axis of the member.  The <em>y</em>-axis is positive upwards. It is sometimes necessary to distinguish member ends; the term <em>j-end</em> is used to refer to the left end or origin, and <em>k-end</em> is the other end (note that the CAL manual uses the <em>i-</em> and <em>j-</em> end for the same purpose).</p>
 <p>Of course $f_0$ and $f_3$ are axial forces, $f_1$ and $f_4$ are shear forces, and $f_2$ and $f_5$ are bending moments.</p>
-<p>$\newcommand{\mat}[1]{\left[\begin{matrix}#1\end{matrix}\right]}$
-The local member stiffness matrix, $\mat{K_l}$, expresses the end forces as a function of the end displacements, thus:
+<p>$\newcommand{\mat}[1]{\left[\begin{matrix}#1\end{matrix}\right]}$</p>
+<p>The local member stiffness matrix, $\mat{K_l}$, expresses the end forces as a function of the end displacements, thus:
 $$
 \mat{f_0\\ f_1\\ f_2\\ f_3\\ f_4\\ f_5} =
 \mat{K_l}
@@ -13204,8 +13211,8 @@ $$
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="flexibility.svg" alt="flexibility"></p>
-<p>Note that at each end, there are two other forces acting, $f_0$, $f_1$ and $f_3$, $f_4$; they are omitted from
-the drawings just to make the drawings a little simpler.</p>
+<p>Note that at each end, there are two other forces acting - axial and shear: $f_0$, $f_1$ and $f_3$, $f_4$. These are not
+shown, for simplicity of figure.</p>
 
 </div>
 </div>
@@ -13214,8 +13221,8 @@ the drawings just to make the drawings a little simpler.</p>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The method of virtual work is probably the simplest and most direct way to do develop the rotation flexibility matrix.</p>
-<p>The following figure shows unit moments placed individually at each end (at location #s 2 and 5).  It also
-shows the resulting rotational displacements; these are the coefficients of the flexibility matrix:</p>
+<p>The following figure shows unit moments placed individually at each end (at location #s 2 and 5).  Below each segment
+is the corresponnding bending moment diagram, $m_i$:</p>
 
 </div>
 </div>
@@ -13231,6 +13238,8 @@ shows the resulting rotational displacements; these are the coefficients of the 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>The figure also
+shows the resulting rotational displacements $\alpha_{ij}$ for each segment; these are the coefficients of the flexibility matrix:</p>
 $$
 \mat{F} = \mat{\alpha_{22} &amp; \alpha_{52}\\ \alpha_{25} &amp; \alpha_{55}}
 $$
@@ -13241,7 +13250,8 @@ $$
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The coefficients of $\mat{F}$, $\alpha_{ij}$, are the end displacements due to unit values of the end forces.
-Specifically $\alpha_{ij}$ is the rotation at $i$ due to a unit moment at $j$:</p>
+Specifically $\alpha_{ij}$ is the rotation at $i$ due to a unit moment at $j$ and is calculated using the method 
+of virtual work (integrating products of bending moments):</p>
 $$
 \mat{F} = \mat{\int_0^L\frac{m_2 m_2}{EI} dx &amp; \int_0^L\frac{m_2 m_5}{EI} dx \\ 
                \int_0^L\frac{m_5 m_2}{EI} dx &amp; \int_0^L\frac{m_5 m_5}{EI} dx }
@@ -13340,7 +13350,7 @@ $$\left[\begin{matrix}\frac{4 E}{L} I & \frac{2 E}{L} I\\\frac{2 E}{L} I & \frac
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Total-End-Forces">Total End Forces<a class="anchor-link" href="#Total-End-Forces">&#182;</a></h4><p>The matrix $\mat{T_f}$ gives the total set of end forces in terms of the two end moments (i.e., that are in equilibrium with the end moments):</p>
+<h4 id="Total-End-Forces---Accounting-For-Axial-and-Shear-Effects">Total End Forces - Accounting For Axial and Shear Effects<a class="anchor-link" href="#Total-End-Forces---Accounting-For-Axial-and-Shear-Effects">&#182;</a></h4><p>The matrix $\mat{T_f}$ gives the total set of end forces in terms of the two end moments (i.e., the end forces that are in equilibrium with the end moments):</p>
 $$
 \mat{f_0\\ f_1\\ f_2\\ f_3\\ f_4\\ f_5} = \mat{T_f} \mat{f_2\\f_5}
 $$
@@ -13511,7 +13521,8 @@ $$\left[\begin{matrix}0\\\frac{6 E}{L^{2}} I\\\frac{2 E}{L} I\\0\\- \frac{6 E}{L
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="chord-rotation.jpg" alt="chord rotation"></p>
+<p>The forces due to end translations are determined by mapping the unit translation to
+end rotations of the elastic curve from the chord.</p>
 
 </div>
 </div>
@@ -13519,9 +13530,9 @@ $$\left[\begin{matrix}0\\\frac{6 E}{L^{2}} I\\\frac{2 E}{L} I\\0\\- \frac{6 E}{L
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The forces due to end translations are determined by considering the unit translation as
-a rotation of the chord.  That is, for the case of $\delta_1 = 1$, (and notabley 
-$\delta_2 = \delta_5 = 0$, then the end moments will be consistent with end rotations
+<p><img src="chord-rotation.svg" alt="chord rotation"></p>
+<p>That is, for the case of $\delta_1 = 1$, (and notabley 
+$\delta_2 = \delta_5 = 0$), then the end moments will be consistent with end rotations
 of $1/L$.  Column 1 will be calculated:</p>
 $$ \mat{T_f} \mat{M} \mat{1/L\\1/L} $$
 </div>
@@ -13732,39 +13743,6 @@ $$\left[\begin{matrix}\frac{A E}{L} & 0 & 0 & - \frac{A E}{L} & 0 & 0\\0 & \frac
 <pre>Matrix([[A*E/L, 0, 0, -A*E/L, 0, 0], [0, 12*E*I/L**3, 6*E*I/L**2, 0, -12*E*I/L**3, 6*E*I/L**2], [0, 6*E*I/L**2, 4*E*I/L, 0, -6*E*I/L**2, 2*E*I/L], [-A*E/L, 0, 0, A*E/L, 0, 0], [0, -12*E*I/L**3, -6*E*I/L**2, 0, 12*E*I/L**3, -6*E*I/L**2], [0, 6*E*I/L**2, 2*E*I/L, 0, -6*E*I/L**2, 4*E*I/L]])
 </pre>
 </div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kc">True</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[1]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>True</pre>
-</div>
-
 </div>
 
 </div>
