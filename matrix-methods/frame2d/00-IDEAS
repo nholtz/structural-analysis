@@ -1,0 +1,9 @@
+April 17 - 2021
+===============
+
+For use as a validation tool (to check other SA software)
+
+ - need tool that can start at a particular value (say Mx @ ???)
+   and trace backward to give the influence all values that
+   affect that #
+ 
